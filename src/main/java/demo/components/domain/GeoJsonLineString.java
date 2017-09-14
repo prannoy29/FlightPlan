@@ -1,8 +1,10 @@
 package demo.components.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the Java object for geoJson for a LineString,
+ */
 public class GeoJsonLineString
 {
     private String type;
@@ -35,6 +37,10 @@ public class GeoJsonLineString
         this.type = "LineString";
     }
 
+    /**
+     * This method reconstructs the String for geoJSON of LineString
+     * @return String geoJSON
+     */
     @Override
     public String toString(){
         String temp ="[";

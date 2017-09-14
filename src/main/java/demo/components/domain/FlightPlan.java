@@ -41,7 +41,7 @@ public class FlightPlan implements Serializable {
     }
 
     protected FlightPlan(){};
-    
+
     public FlightPlan(String geoJsonLineString) {
         this.geoJsonLineString = geoJsonLineString;
     }
