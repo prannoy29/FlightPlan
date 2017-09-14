@@ -1,15 +1,19 @@
 package demo.components.domain;
 
-import org.hibernate.annotations.Type;
-;
-import com.vividsolutions.jts.geom.LineString;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The Class represents flightPlan table in gisdb, it has
+ * auto generated primary key "id" and String geoJsonLineString
+ * which is the string form of geoJson of a LineString
+ */
 @Entity
 @Table(name = "flightPlan")
 public class FlightPlan implements Serializable {
-
+    /**
+     * declaring unique versionID for this class
+     */
     private static final long serialVersionUID = 2342352452451l;
 
     @Id
@@ -36,6 +40,8 @@ public class FlightPlan implements Serializable {
         this.geoJsonLineString = geoJsonLineString;
     }
 
+    protected FlightPlan(){};
+    
     public FlightPlan(String geoJsonLineString) {
         this.geoJsonLineString = geoJsonLineString;
     }
