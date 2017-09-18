@@ -2,6 +2,7 @@ package demo.components.controller;
 
 import demo.components.dao.PointDao;
 import demo.components.domain.GeoJsonPoint;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
