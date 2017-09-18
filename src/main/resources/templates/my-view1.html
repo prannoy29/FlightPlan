@@ -1,0 +1,82 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="my-icons.html">
+<link href = "../css/main.css">
+<link rel="import" href="shared-styles.html">
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+      #mapid{
+        display:block;
+        height:90vh;
+      }
+
+    </style>
+    <div id="wrapper">
+
+    <div id="mapid">
+    <google-map id="map" click-events = "true"  on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+     <!--  <google-map-marker marker={{marker}} latitude="37.77493" longitude="-122.41943" draggable="true"
+        click-events="true" >  
+      </google-map-marker> -->
+    </google-map>
+    </div>
+    <div id="over_map">
+      hahahaha
+    </div>
+    </div>
+    
+
+  </template>
+  <script>
+
+    Polymer({
+      is: 'my-view1',
+
+      properties:{
+        map : {
+          type : Object
+        }
+      },
+
+      fg: function() {
+        var iwindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(this.map, 'click', function(e) {
+          var latitude = e.latLng.lat();
+          var longitude = e.latLng.lng();
+          console.log(e.latLng.lat() + ", " + e.latLng.lat());
+          var uluru = {lat: latitude, lng: longitude};
+          iwindow.setContent(latitude+", "+longitude),
+          iwindow.setPosition(uluru);
+          iwindow.open(this.map);
+        }.bind(this));   
+      },
+
+      clickf: function (event) {
+            var longitude = event.target.longitude;
+            var latitude = event.target.latitude;
+            var iwindow = new google.maps.InfoWindow({
+              content: latitude+", "+longitude, 
+
+              });
+            iwindow.setPosition({lat : latitude, lng : longitude});
+            iwindow.open(this.map);
+
+            console.log(this.map);
+      },
+
+      clickevent: function(e, detail) {
+        this.fire('kick', {kicked: true});
+
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+<my-view1></my-view1>
