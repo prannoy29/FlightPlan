@@ -1,5 +1,8 @@
 package demo.components.domain;
 
+/**
+ * This class represents the Java object for geoJson for a Point,
+ */
 public class GeoJsonPoint {
     private String type;
 
@@ -28,10 +31,14 @@ public class GeoJsonPoint {
         this.coordinates = coordinates;
     }
 
+    /**
+     * This method reconstructs the String for geoJSON of Point
+     * @return String geoJSON
+     */
     @Override
     public String toString(){
         String result = "["+String.valueOf(coordinates[0])+","+String.valueOf(coordinates[1])+"]";
-        return "'{\"type\":\"Point\",\"coordinates\":"+result+"}'";
+        return "{\"type\":\"Point\",\"coordinates\":"+result+"}";
     }
 }
 
