@@ -25,8 +25,7 @@ public class FlightPlanController {
 
 
     @RequestMapping(value = "/pathMaps", method = RequestMethod.POST)
-    public void register(@RequestBody GeoJsonLineString geoJsonLineString) {
-        FlightPlan flightPlan = new FlightPlan(geoJsonLineString.toString());
+    public void register(@RequestBody FlightPlan flightPlan) {
         flightPlanRepository.save(flightPlan);
     }
 
