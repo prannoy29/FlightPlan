@@ -141,21 +141,33 @@ public class FlightPlan implements Serializable {
         this.privateId = privateId;
     }
 
-    @Column
-    @Column(name = "linestring")
-    private String geoJsonLineString;
+    private FlightPlanDetails flightPlanDetails;
 
-    public String getGeoJsonLineString() {
-        return geoJsonLineString;
+    public FlightPlanDetails getFlightPlanDetails() {
+        return flightPlanDetails;
     }
 
-    public void setGeoJsonLineString(String geoJsonLineString) {
-        this.geoJsonLineString = geoJsonLineString;
+    public void setFlightPlanDetails(FlightPlanDetails flightPlanDetails) {
+        this.flightPlanDetails = flightPlanDetails;
     }
 
     protected FlightPlan(){};
 
-    public FlightPlan(String geoJsonLineString) {
-        this.geoJsonLineString = geoJsonLineString;
+    public FlightPlan(UUID aircraftId, UUID contractId,
+                      Date createdAt, UUID createdBy,
+                      boolean isDeleted, Date modifiedAt, UUID modifiedBy,
+                      String name, UUID organizationId, UUID privateId, FlightPlanDetails flightPlanDetails)
+    {
+        this.aircraftId = aircraftId;
+        this.contractId = contractId;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.isDeleted = isDeleted;
+        this.modifiedAt = modifiedAt;
+        this.modifiedBy = modifiedBy;
+        this.name = name;
+        this.organizationId = organizationId;
+        this.privateId = privateId;
+        this.flightPlanDetails = flightPlanDetails;
     }
 }
