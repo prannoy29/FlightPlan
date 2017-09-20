@@ -1,0 +1,65 @@
+<link rel="import" href="bower_components/polymer/polymer.html" />
+<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="shared-styles.html" />
+<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+<dom-module id="my-view2">
+  <template>
+    <h1>
+    Okay
+    </h1>
+<!--
+    {
+    "type": "Point",
+    "coordinates": [
+    -71.32294714450836,
+    42.415896609405564
+    ]
+    }
+    -->
+   <!--  <iron-ajax
+    id='ajaxId'
+    method="POST"
+    on-response="handleResponse"
+    params = '{"client_id": "utm-android", "client_secret":"utm-android-secret", "grant_type" : "password" , "username": "anilU" , "password" : "password" }'
+
+    last-response="{{ajaxResponse}}">
+    </iron-ajax> -->
+    <iron-ajax
+    auto
+    id='ajaxId'
+    url = "http://localhost:8080/point/getElevatio"
+    params = {{_getParams(access_token)}}"
+    method="POST"
+    handle-as="text"
+    on-response="handleResponse"
+    last-response="{{ajaxResponse}}">
+    </iron-ajax>
+    <h2>Response is</h2>
+    <span id="l">{{ajaxResponse}}</span> 
+  </template>
+ 
+  <script>
+    Polymer({
+      is: 'my-view2',
+      /*attached: function () {
+        var xhr = this.$$('#ajaxId');
+        var url = 'https://registryapi.z-apps.io/oauth/token';
+        xhr.headers='{"Content-Type": "application/json", "Access-Control-Allow-Origin" : "http://127.0.0.1:8081" }'
+        xhr.url = encodeURI(url);
+        xhr.params = {"client_id": "utm-android", "client_secret":"utm-android-secret", "grant_type" : "password" , "username": "anilU" , "password" : "password" }
+
+        xhr.generateRequest();
+      },*/
+      /*attached: function () {
+        var xhr = this.$$('#ajaxId');
+        xhr.headers='{"Content-Type": "application/json", "Access-Control-Allow-Origin" : "*","Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT" , "Access-Control-Max-Age" : "1000" , "Access-Control-Allow-Headers" : "x-requested-with, Content-Type, origin, authorization, accept, client-security-token" }'
+        xhr.generateRequest();
+      },*/
+      handleResponse: function(data){
+        console.log(data.detail.response);
+        
+      }
+    });
+  </script>
+</dom-module>
