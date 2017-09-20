@@ -141,7 +141,9 @@ public class FlightPlan implements Serializable {
         this.privateId = privateId;
     }
 
+   /*
     private FlightPlanDetails flightPlanDetails;
+
 
     public FlightPlanDetails getFlightPlanDetails() {
         return flightPlanDetails;
@@ -150,13 +152,13 @@ public class FlightPlan implements Serializable {
     public void setFlightPlanDetails(FlightPlanDetails flightPlanDetails) {
         this.flightPlanDetails = flightPlanDetails;
     }
-
+*/
     protected FlightPlan(){};
 
     public FlightPlan(UUID aircraftId, UUID contractId,
                       Date createdAt, UUID createdBy,
                       boolean isDeleted, Date modifiedAt, UUID modifiedBy,
-                      String name, UUID organizationId, UUID privateId, FlightPlanDetails flightPlanDetails)
+                      String name, UUID organizationId, UUID privateId)
     {
         this.aircraftId = aircraftId;
         this.contractId = contractId;
@@ -168,6 +170,6 @@ public class FlightPlan implements Serializable {
         this.name = name;
         this.organizationId = organizationId;
         this.privateId = privateId;
-        this.flightPlanDetails = flightPlanDetails;
+        ;
     }
 }
