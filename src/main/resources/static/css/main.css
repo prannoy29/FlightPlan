@@ -1,0 +1,8 @@
+google-map{
+	height : 250px;
+	width : 100%;
+}
+
+#wrapper { position: relative; }
+#over_map { position: absolute; top: 10px; left: 10px; z-index: 99; }
+
