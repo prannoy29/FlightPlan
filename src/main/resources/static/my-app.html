@@ -1,24 +1,24 @@
-<script src="../static/bower_components/webcomponentsjs/webcomponents.js"></script>
-<link rel="import" href="../static/bower_components/polymer/polymer.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-drawer/app-drawer.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-drawer-layout/app-drawer-layout.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-header/app-header.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-header-layout/app-header-layout.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html" />
-<link rel="import" href="../static/bower_components/app-layout/app-toolbar/app-toolbar.html" />
-<link rel="import" href="../static/bower_components/app-route/app-location.html" />
-<link rel="import" href="../static/bower_components/app-route/app-route.html" />
-<link rel="import" href="../static/bower_components/iron-pages/iron-pages.html" />
-<link rel="import" href="../static/bower_components/iron-selector/iron-selector.html" />
-<link rel="import" href="../static/bower_components/paper-icon-button/paper-icon-button.html" />
-<link rel="import" href="../static/bower_components/google-map/google-map.html" />
-
+<script src="../bower_components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html" />
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html" />
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html" />
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html" />
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html" />
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html" />
+<link rel="import" href="../bower_components/app-route/app-location.html" />
+<link rel="import" href="../bower_components/app-route/app-route.html" />
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html" />
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html" />
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../bower_components/google-map/google-map.html" />
 <dom-module id="my-app">
     <template>
         <style>
             :host {
                 --app-primary-color: #4285f4;
                 --app-secondary-color: black;
+
                 display: block;
             }
 
@@ -26,7 +26,6 @@
                 color: #fff;
                 background-color: var(--app-primary-color);
             }
-
             app-header paper-icon-button {
                 --paper-icon-button-ink-color: white;
             }
@@ -52,8 +51,15 @@
 
                 font-weight: bold;
             }
-
         </style>
+        <style>
+            google-map {
+                height: 900px;
+            }
+        </style>
+
+
+
         <div style="height: 400px;">
             <div class="panel-contents">
 
@@ -71,16 +77,13 @@
                 route="{{route}}"
                 pattern="/:page"
                 data="{{routeData}}"
-                tail="{{subroute}}">
-        </app-route>
+                tail="{{subroute}}"></app-route>
 
         <app-drawer-layout >
             <app-drawer>
 
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="view1" href="/view2">Map</a>
-                    <a name="view2" href="/view2">Flight Plans</a>
-                    <a name="view3" href="/view3">View Three</a>
+                    <a name="view1">Map</a>
                 </iron-selector>
             </app-drawer>
 
@@ -88,11 +91,12 @@
                 <app-header >
                     <app-toolbar>
                         <paper-icon-button icon="menu"></paper-icon-button>
-                        <div>Maps</div>
+                        <div>My App</div>
                     </app-toolbar>
                 </app-header>
 
                 <iron-pages
+                        style = "margin-top : -412px"
                         selected="[[page]]"
                         attr-for-selected="name"
                         fallback-selection="view404"
@@ -103,6 +107,7 @@
                     <my-view3 name="view3"></my-view3>
                     <my-view404 name="view404"></my-view404>
                 </iron-pages>
+
             </app-header-layout>
         </app-drawer-layout>
     </template>
@@ -135,15 +140,18 @@
 
             _showPage404: function() {
                 this.page = 'view404';
-            }/*,
+            },
 
             clickf: function (event) {
                 var longitude = event.target.longitude;
                 var latitude = event.target.latitude;
                 alert("longitude");
                 console.log("ll");
-            }*/
+            }
 
         });
     </script>
+
+
+
 </dom-module>
