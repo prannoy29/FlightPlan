@@ -2,19 +2,21 @@ package demo.components.controller;
 
 
 import demo.components.domain.Login;
+import demo.components.domain.Weather;
 import demo.components.repository.WeatherRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by zemoso on 12/9/17.
@@ -94,5 +96,58 @@ public class UavController {
         return response;
     }
 
-    
+    @RequestMapping(value = "/weather",method = RequestMethod.GET)
+    public Weather getWeather(){
+        return repository.getData();
+    }
+
+    @RequestMapping(value = "/weather/id",method = RequestMethod.GET)
+    public void getWeatherById(@RequestParam("lat") Double lat, @RequestParam("lon") Double lon,@RequestParam("date") String date) throws ParseException{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date datetime = sdf.parse(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(datetime);
+
+        StringBuilder builder = new StringBuilder();
+        String s = "";
+        if(lon<0){
+            lon = lon*-1;
+             s = lon.toString();
+            s = s.replace('.','_');
+            builder.append(s);
+            builder.append("W_");
+        }else{
+            s = lon.toString();
+            s = s.replace('.','_');
+            builder.append(s);
+            builder.append("E_");
+        }
+
+        if(lat<0){
+            lat = lat*-1;
+            s = lat.toString();
+            s = s.replace('.','_');
+            builder.append(s);
+            builder.append("S_");
+        }else {
+            s = lat.toString();
+            s = s.replace('.','_');
+            builder.append(s);
+            builder.append("N_");
+        }
+        int i = cal.get(Calendar.HOUR_OF_DAY);
+        date = date.substring(0,13);
+        date = date.replace('-','_');
+        builder.append(date);
+        String id = builder.toString();
+        System.out.println(id);
+    }
+
+    @ExceptionHandler(ParseException.class)
+    void handleParseException(HttpServletResponse response) throws Exception{
+        response.sendError(HttpStatus.BAD_REQUEST.value(),"Please check the date format");
+    }
+
 }
+
+
