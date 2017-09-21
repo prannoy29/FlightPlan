@@ -51,7 +51,7 @@
     <div id="mapid">
     <google-map id="map" click-events = "true" latitude="47.5515" longitude="-101.0020" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
-        <google-map-marker click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-google-map-marker-click="markerClick">
+        <google-map-marker hidden="true" click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
 
       </google-map-marker>
       <!--</template>-->
@@ -113,7 +113,7 @@
 
       fg: function() {
           var fk = this.contents;
-          //var marker = document.createElement('google-map-marker');
+          var marker = document.createElement('google-map-marker');
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
           var infoOnMap = this.$$('#infomap');
@@ -136,6 +136,7 @@
 
             this.longi = longitude;
             this.lati = latitude;
+            google.maps.event.trigger(marker, 'click');
             xhr.body = {
                 "type": "Point",
                 "coordinates": [this.long , this.lat ]
