@@ -1,6 +1,11 @@
 <link rel="import" href="bower_components/polymer/polymer.html" />
+<link rel="import" href="bower_components/polymer-ts/polymer-ts.html" />
+<link rel="import" href="bower_components/paper-map-info/paper-map-info.html" />
 <link rel="import" href="bower_components/google-map/google-map.html" />
+<link rel="import" href="bower_components/google-map/google-map-marker.html" />
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="my-icons.html" />
 <link rel="import" href = "css/main.css" />
 <link rel="import" href="shared-styles.html" />
@@ -28,10 +33,35 @@
               last-response="{{ajaxResponse}}">
       </iron-ajax>
 
+
+    <!--<google-map on-google-map-ready="_mapReady" fit-to-markers>
+  <template is="dom-repeat" items="[[friends]]" as="f">
+    <google-map-marker >
+    </google-map-marker>
+  </template>
+  <paper-map-info id="myinfocard" fade-in>
+    <div class="layout horizontal">
+      <img src$="[[selectedFriend.picture]]" alt$="[[selectedFriend.name]]" >
+      <paper-icon-button icon="communication:chat" on-tap="_startFriendChat"></paper-icon-button>
+    </div>
+  </paper-map-info>
+  </google-map>-->
+
     <div id="wrapper">
     <div id="mapid">
-    <google-map id="map" click-events = "true"  on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+    <google-map id="map" click-events = "true" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+     <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
+        <google-map-marker click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-google-map-marker-click="_markerClick">
+
+      </google-map-marker>
+      <!--</template>-->
+      <paper-map-info id="myinfocard" fade-in>
+        <div class="layout horizontal">
+            Hi everyone
+        </div>
+      </paper-map-info>
     </google-map>
+
     </div>
     <div style="display: block;
     float: right;
@@ -63,31 +93,49 @@
       is: 'my-view1',
 
       properties:{
-          contents : Number,
-          lat : Number,
+      contents : Number,
+           lat : Number,
           long : Number,
-        map : {
+ selectedSalon : {
           type : Object
-        }
+          },
+           map : {
+          type : Object
+        },
+          lati : {
+              type : Number
+          },
+         longi : {
+              type : Number
+          }
+
       },
 
       fg: function() {
 
           var fk = this.contents;
+          //var marker = document.createElement('google-map-marker');
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
-          var url = 'http://localhost:8080/point/getElevation';
+          var url = 'http://localhost:8080/point/getElevatio';
           xhr.url = encodeURI(url);
           xhr.headers={"Accept": "*/*", "Content-Type": "application/json"};
         var iwindow = new google.maps.InfoWindow();
 
         google.maps.event.addListener(this.map, 'click', function(e) {
 
+
           var latitude = e.latLng.lat();
           this.lat = latitude;
 
           var longitude = e.latLng.lng();
             this.long = longitude;
+
+
+            this.longi = longitude;
+            this.lati = latitude;
+
+
             xhr.body = {
                 "type": "Point",
                 "coordinates": [this.lat , this.long ]
@@ -98,7 +146,7 @@
 
           iwindow.setContent(fk);
           iwindow.setPosition(uluru);
-          iwindow.open(this.map);
+         // iwindow.open(this.map);
         }.bind(this));
       },
 
@@ -127,8 +175,15 @@
 
         handleResponse : function(e){
           this.contents = e.detail.response;
+        },
 
+        markerClick: function(e) {
+            this.selectedSalon = e.model.get('s');
+            this.$.myinfocard.showInfoWindow(e.srcElement.marker);
+        },
 
+        _startFriendChat: function(e) {/*
+        ... do something with this.selectedFriend to chat*/
         }
 
     });

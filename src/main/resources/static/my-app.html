@@ -13,7 +13,7 @@
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="bower_components/google-map/google-map.html" />
 <dom-module id="my-app">
-    <template>
+    <template id="mypop">
         <style>
             :host {
                 --app-primary-color: #4285f4;
@@ -58,6 +58,24 @@
             }
         </style>
 
+        <iron-ajax
+                auto
+                id='ajaxId1'
+                method="GET"
+                url = "http://localhost:8080/profile"
+                handle-as="json">
+        </iron-ajax>
+        <iron-ajax
+                auto
+                id='ajaxId1'
+                method="GET"
+                url = "http://localhost:8080/flightplans"
+                handle-as="json"
+                on-response="handleResponse"
+                last-response="{{ajaxResponse}}">
+        </iron-ajax>
+        <!--contentType="application/json"-->
+
 
 
         <div style="height: 400px;">
@@ -80,7 +98,10 @@
                 tail="{{subroute}}"></app-route>
 
         <app-drawer-layout >
-            <app-drawer>
+            <app-drawer id="leftside">
+                <span id="loi">
+
+                </span>
 
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <a name="view1">Map</a>
@@ -118,6 +139,7 @@
             is: 'my-app',
 
             properties: {
+                contents : String,
                 page: {
                     type: String,
                     reflectToAttribute: true,
@@ -133,6 +155,11 @@
                 this.page = page || 'view1';
             },
 
+            /*ready: function() {
+                var ls = this.$$('#leftside');
+                ls.innerHTML =
+            }*/
+
             _pageChanged: function(page) {
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
@@ -140,6 +167,16 @@
 
             _showPage404: function() {
                 this.page = 'view404';
+            },
+
+            handleResponse : function(e){
+                var ls = this.$$('#leftside');
+                var len = e.detail.response;
+               var flightList = [];
+               for (var i = 0; i < len; i++){
+                   
+               }
+               console.log(e.detail.response);
             },
 
             clickf: function (event) {
