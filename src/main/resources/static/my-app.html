@@ -60,16 +60,21 @@
 
         <iron-ajax
                 auto
-                id='ajaxId1'
+                id='ajaxId'
                 method="GET"
-                url = "http://localhost:8080/profile"
-                handle-as="json">
+                url = "/profile"
+                handle-as="json"
+                on-response="handleResponse1"
+
+
+                last-response="{{ajaxResponse}}">
         </iron-ajax>
+
         <iron-ajax
-                auto
+
                 id='ajaxId1'
                 method="GET"
-                url = "http://localhost:8080/flightplans"
+                url = "/flightplans"
                 handle-as="json"
                 on-response="handleResponse"
                 last-response="{{ajaxResponse}}">
@@ -154,11 +159,20 @@
             _routePageChanged: function(page) {
                 this.page = page || 'view1';
             },
+            /*attached: function () {
+                var xhr = this.$$('#ajaxId');
+                xhr.generateRequest();
+
+            },
+*/
 
             /*ready: function() {
-                var ls = this.$$('#leftside');
-                ls.innerHTML =
-            }*/
+                var xhr = this.$$('#ajaxId');
+                xhr.generateRequest;
+                var xhr1 = this.$$('#ajaxId1');
+                xhr1.generateRequest;
+
+            },*/
 
             _pageChanged: function(page) {
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
@@ -170,13 +184,29 @@
             },
 
             handleResponse : function(e){
+                var flightlist = [];
+                var flightstatuslist = [];
                 var ls = this.$$('#leftside');
-                var len = e.detail.response;
-               var flightList = [];
-               for (var i = 0; i < len; i++){
-                   
-               }
-               console.log(e.detail.response);
+                var responses = e.detail.response;
+                console.log(responses.objectsList);
+                responses = responses.objectsList;
+                var len = responses.length;
+                for(var i = 0; i < len; i++){
+                    flightlist.push(responses[i].name);
+                    flightstatuslist.push(responses[i].status);
+                    ls.innerHTML +="<p><b> <span style='margin-left: 8px; color:hotpink'>" + flightlist[i] + "</b></span><br><span style='font-size:small;color:blue; float:right; margin-right: 10px' > Status: " + flightstatuslist[i] + "</span></p>";
+                }
+
+
+
+                console.log(len);
+            },
+
+            handleResponse1 : function(e){
+                var ls = this.$$('#leftside');
+                console.log(e.detail.response);
+                var xhr1 = this.$$('#ajaxId1');
+                xhr1.generateRequest();
             },
 
             clickf: function (event) {

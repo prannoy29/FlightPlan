@@ -49,21 +49,21 @@
 
     <div id="wrapper">
     <div id="mapid">
-    <google-map id="map" click-events = "true" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+    <google-map id="map" click-events = "true" latitude="47.5515" longitude="-101.0020" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
-        <google-map-marker click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-google-map-marker-click="_markerClick">
+        <google-map-marker click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-google-map-marker-click="markerClick">
 
       </google-map-marker>
       <!--</template>-->
-      <paper-map-info id="myinfocard" fade-in>
-        <div class="layout horizontal">
-            Hi everyone
+      <paper-map-info id="myinfocard" style="padding:2px; opacity:0.8" fade-in>
+        <div style="padding:2px" id="infomap">
+
         </div>
       </paper-map-info>
     </google-map>
 
     </div>
-    <div style="display: block;
+    <!--<div style="display: block;
     float: right;
     z-index: 3;
     position: absolute; /*newly added*/
@@ -83,7 +83,7 @@
     top: -310px;/*newly added*/;margin-bottom=-330px"
          id="over_map">
       Weather : {{ajaxResponse}}
-    </div>
+    </div>-->
     </div>
 
   </template>
@@ -112,15 +112,17 @@
       },
 
       fg: function() {
-
           var fk = this.contents;
           //var marker = document.createElement('google-map-marker');
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
-          var url = 'http://localhost:8080/point/getElevatio';
+          var infoOnMap = this.$$('#infomap');
+          var url = 'http://localhost:8080/point/getElevation';
           xhr.url = encodeURI(url);
           xhr.headers={"Accept": "*/*", "Content-Type": "application/json"};
         var iwindow = new google.maps.InfoWindow();
+
+
 
         google.maps.event.addListener(this.map, 'click', function(e) {
 
@@ -134,32 +136,38 @@
 
             this.longi = longitude;
             this.lati = latitude;
-
-
             xhr.body = {
                 "type": "Point",
-                "coordinates": [this.lat , this.long ]
+                "coordinates": [this.long , this.lat ]
             };
             xhr.generateRequest();
             fk = this.contents;
           var uluru = {lat: latitude, lng: longitude};
 
-          iwindow.setContent(fk);
+          //iwindow.setContent(fk);
+            var infoContents = Math.round(parseFloat(fk) * 100);
+            var ind = infoContents/100;
+
+
+            infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " feets  <br /><b>Weather : </b>";
+
           iwindow.setPosition(uluru);
          // iwindow.open(this.map);
         }.bind(this));
+
+
       },
 
         ready: function () {
-            if (this.lat == undefined) {
-                this.lat = -71.32294714450836;
-            }
             if (this.long == undefined) {
-                this.long = 42.415896609405564;
+                this.long = -71.32294714450836;
+            }
+            if (this.lat == undefined) {
+                this.lat = 42.3601;
             }
         },
 
-       /* attached: function () {
+        /*attached: function () {
             var xhr = this.$$('#ajaxId');
             var url = 'http://localhost:8080/point/getElevatio';
             xhr.url = encodeURI(url);
@@ -178,7 +186,8 @@
         },
 
         markerClick: function(e) {
-            this.selectedSalon = e.model.get('s');
+
+            //this.selectedSalon = e.model.get('s');
             this.$.myinfocard.showInfoWindow(e.srcElement.marker);
         },
 
