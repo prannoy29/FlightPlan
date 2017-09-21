@@ -1,4 +1,3 @@
-/*
 package demo.components.controller;
 import demo.components.dao.PointDao;
 import demo.components.domain.GeoJsonPoint;
@@ -23,4 +22,3 @@ public class Ptctrl {
 
 
 
-*/
