@@ -12,6 +12,14 @@
 <link rel="import" href="bower_components/iron-selector/iron-selector.html" />
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="bower_components/google-map/google-map.html" />
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="bower_components/paper-styles/color.html">
+<link rel="import" href="bower_components/paper-styles/demo-pages.html">
+<link rel="import" href="bower_components/neon-animation/neon-animations.html">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <dom-module id="my-app">
     <template id="mypop">
         <style>
@@ -182,6 +190,14 @@
             _showPage404: function() {
                 this.page = 'view404';
             },
+
+/*
+<paper-button on-tap="toggleDialog">Plain dialog</paper-button>
+<paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
+<h2>Dialog Title</h2>
+<p>Lom officia deserunt mollit anim id est laborum.</p>
+</paper-dialog>
+*/
 
             handleResponse : function(e){
                 var flightlist = [];
