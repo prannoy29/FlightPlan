@@ -183,7 +183,7 @@
             if(!isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
                 infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><br /><b>" + wk.condition +" </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
             else if(isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
-                infoOnMap.innerHTML = "<b>" + wk.condition +" </b><h3>" + wk.temperature_min_f + " F </h3>";
+                infoOnMap.innerHTML = "<b>" + wk.condition +"</b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>"
             else if(!isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
                 infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters";
             else if(isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
