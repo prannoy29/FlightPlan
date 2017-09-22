@@ -17,7 +17,7 @@ public class Weather {
     private String id;
 
     @JsonProperty(value = "date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date date_time;
 
     @JsonProperty(value = "condition")
@@ -57,7 +57,7 @@ public class Weather {
     private String provider;
 
     @JsonProperty(value = "update_time")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date update_time;
 
     public GeoPoint getLocation() {
