@@ -84,28 +84,12 @@
 	background:#ccc;    right: 15px; /*newly added*/
     top: -310px;/*newly added*/;margin-bottom=-330px"
          id="over_map">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+         id="over_map">
       Weather : {{ajaxResponse}}
     </div>-->
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
       Elevation : {{ajaxResponse}}
     </div>
->>>>>>> Stashed changes
     </div>
 
   </template>
@@ -138,25 +122,7 @@
           var marker = document.createElement('google-map-marker');
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
           var infoOnMap = this.$$('#infomap');
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
           var url = 'http://localhost:8080/point/getElevation';
           xhr.url = encodeURI(url);
           xhr.headers={"Accept": "*/*", "Content-Type": "application/json"};
@@ -200,49 +166,15 @@
       },
 
         ready: function () {
-<<<<<<< Updated upstream
+
             if (this.long == undefined) {
                 this.long = -71.32294714450836;
             }
-            if (this.lat == undefined) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                this.lat = 42.3601;
-=======
-            if (this.lat == undefined) {
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-                this.long = -71.3;
-            }
+
+
             if (this.long == undefined) {
                 this.lat = 42.415896609405564;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
             }
         },
 
