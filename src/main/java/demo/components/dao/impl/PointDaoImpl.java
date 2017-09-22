@@ -28,7 +28,7 @@ public class PointDaoImpl implements PointDao {
     public Double getElevation(String geoJsonPoint) {
         if(jdbcTemplate!=null){
             System.out.println(geoJsonPoint);
-            String query = "SELECT max(ST_Value(r.rast,foo.pt)) AS val FROM public.n48w103_500 JOIN (SELECT ST_setSRID(ST_GeomFromGeoJSON('" +
+            String query = "SELECT max(ST_Value(r.rast,foo.pt)) AS val FROM public.n49w104_500 JOIN (SELECT ST_setSRID(ST_GeomFromGeoJSON('" +
                     geoJsonPoint + "'),4326)As pt) As foo ON ST_Intersects(r.rast,foo.pt);";
         double elevation =  jdbcTemplate.queryForObject(query,Double.class);
 
