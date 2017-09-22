@@ -12,6 +12,7 @@
 <link rel="import" href="bower_components/paper-styles/color.html">
 <link rel="import" href="bower_components/paper-styles/demo-pages.html">
 <link rel="import" href="bower_components/neon-animation/neon-animations.html">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <link rel="import" href="my-icons.html" />
 <link rel="import" href = "css/main.css" />
 <link rel="import" href="shared-styles.html" />
@@ -35,6 +36,7 @@
               method="POST"
               handle-as="text"
               on-response="handleResponse"
+              on-error="handleError"
               contentType="application/json"
               last-response="{{ajaxResponse}}">
       </iron-ajax>
@@ -45,8 +47,11 @@
 
               handle-as="json"
               on-response="handleWeather"
+              on-error="handleWeatherError"
               contentType="application/json"
-              last-response="{{ajaxResponse1}}">
+              last-response="{{ajaxResponse1}}"
+
+                >
       </iron-ajax>
 
 
@@ -66,21 +71,36 @@
   </google-map>-->
 
     <div id="wrapper">
+        <script>
 
-        <!--<paper-button raised onclick="dialogopen">plain dialog</paper-button>
+        </script>
+        <!--<div>
+        <paper-button on-tap="toggleDialog"  data-args="1">1 dialogs</paper-button>
+        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
+            <h2>1</h2>
+            <p>Lom officia deserunt mollit anim id est laborum.</p>
+        </paper-dialog>
+        </div>
+        <div>
+        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
+            <h2>2</h2>
+            <p>Lom officia deserunt mollit anim id est laborum.</p>
+        </paper-dialog>
+        </div>
+        <div></div><paper-button on-tap="toggleDialog">2 dialog</paper-button>
+        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
+            <h2>3</h2>
+            <p>Lom officia deserunt mollit anim id est laborum.</p>
+        </paper-dialog>
+        <div></div><paper-button on-tap="toggleDialog">3 dialog</paper-button>
 
-
-        <paper-dialog id="dialog">
-            <h2>Dialog Title</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </paper-dialog>-->
-
-
+        </div>-->
 
     <div id="mapid">
 
+
     <google-map id="map" click-events = "true" longitude="-103.5" latitude ="48.5" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
 
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
         <google-map-marker  hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
@@ -95,34 +115,7 @@
     </google-map>
 
     </div>
-    <!--<div style="display: block;
-    float: right;
-    z-index: 3;
-    position: absolute; /*newly added*/
-    margin:10px;
-	padding:15px;
 
-	-webkit-box-shadow:
-		8px 10px 10px rgba(0,0,0,0.5)
-		inset 8px 10px 10px rgba(255,255,255,0.75);
-	-moz-box-shadow:
-		8px 10px 10px rgba(0,0,0,0.5),
-		inset 8px 10px 10px rgba(255,255,255,0.75);
-	box-shadow:
-		8px 10px 10px rgba(0,0,0,0.5),
-		inset 8px 10px 10px rgba(255,255,255,0.75);
-	background:#ccc;    right: 15px; /*newly added*/
-    top: -310px;/*newly added*/;margin-bottom=-330px"
-         id="over_map">
-<<<<<<< Updated upstream
-         id="over_map">
-      Weather : {{ajaxResponse}}
-    </div>-->
-
-
-
-      Elevation : {{ajaxResponse}}
-    </div>
     </div>
 
   </template>
@@ -153,11 +146,14 @@
 
       },
 
-        dialogopen : function(){
+        toggleDialog: function(e) {
+            var args = e.target.getAttribute('data-args');
 
-                this.$.dialog.open();
+
+            this.$.dialog.toggle();
 
         },
+
 
       fg: function() {
           var fk = this.contents;
@@ -192,7 +188,6 @@
                 "coordinates": [this.long , this.lat ]
             };
             xhr.generateRequest();
-            /*localhost:8080/weather/id?lat=45.96&lon=-103.50&date=2017-06-22T8:40:00Z*/
             var weatherurl = "http://localhost:8080/weather/id?lat="+latitude+"&lon="+ longitude + "&date=2017-06-22T8:40:00Z";
             xhrWeather.url = encodeURI(weatherurl);
             xhrWeather.generateRequest();
@@ -205,8 +200,15 @@
             var infoContents = Math.round(parseFloat(fk) * 100);
             var ind = infoContents/100;
 
+            if(!isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
+                infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><b>Weather : </b>" + wk.temperature_min_f + " F";
+            else if(isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
+                infoOnMap.innerHTML = "<b>Weather : </b>" + wk.temperature_min_f + " F";
+            else if(!isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
+                infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters";
+            else if(isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
+                infoOnMap.innerHTML = "No data Available";
 
-            infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><b>Weather : </b>" + wk.temperature_min_f + " F";
 
           iwindow.setPosition(uluru);
          // iwindow.open(this.map);
@@ -214,6 +216,10 @@
 
 
       },
+        ondialog : function(){
+            this.$.dialog.open();
+
+        },
 
         ready: function () {
 
@@ -248,9 +254,12 @@
         },
         handleWeather : function(e){
             this.weather = e.detail.response;
-            console.log(e.detail.response);
+
         },
 
+        handleWeatherError : function(e){
+            this.weather = "No data Available";
+        },
         markerClick: function(e) {
 
             //this.selectedSalon = e.model.get('s');
