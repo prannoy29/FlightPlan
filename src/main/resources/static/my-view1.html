@@ -53,6 +53,7 @@
     <div id="mapid">
 
     <google-map id="map" click-events = "true" latitude="47.5515" longitude="-101.0020" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
         <google-map-marker hidden="true" click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
 
@@ -86,9 +87,12 @@
     top: -310px;/*newly added*/;margin-bottom=-330px"
          id="over_map">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       Weather : {{ajaxResponse}}
     </div>-->
 =======
+=======
+>>>>>>> Stashed changes
       Elevation : {{ajaxResponse}}
     </div>
 >>>>>>> Stashed changes
@@ -125,7 +129,10 @@
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           var infoOnMap = this.$$('#infomap');
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
           var url = 'http://localhost:8080/point/getElevation';
@@ -176,13 +183,19 @@
                 this.long = -71.32294714450836;
             }
             if (this.lat == undefined) {
+<<<<<<< Updated upstream
                 this.lat = 42.3601;
 =======
             if (this.lat == undefined) {
+=======
+>>>>>>> Stashed changes
                 this.long = -71.3;
             }
             if (this.long == undefined) {
                 this.lat = 42.415896609405564;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             }
         },
