@@ -61,6 +61,8 @@
       <paper-icon-button icon="communication:chat" on-tap="_startFriendChat"></paper-icon-button>
     </div>
   </paper-map-info>
+  "Raster of 500x500 pixels has 1 band and extent of BOX(-71.9542592592635 42.2598148148115,-71.907962962967 42.306111111108)
+    band 1 of pixtype 32BF is in-db with NODATA value of -9999"
   </google-map>-->
 
     <div id="wrapper">
@@ -77,7 +79,9 @@
 
 
     <div id="mapid">
-    <google-map id="map" click-events = "true" latitude="45.973332" longitude="-103.502332" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
+    <google-map id="map" click-events = "true" longitude="-103.5" latitude ="48.5" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
         <google-map-marker  hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
 
@@ -99,7 +103,7 @@
 	padding:15px;
 
 	-webkit-box-shadow:
-		8px 10px 10px rgba(0,0,0,0.5),
+		8px 10px 10px rgba(0,0,0,0.5)
 		inset 8px 10px 10px rgba(255,255,255,0.75);
 	-moz-box-shadow:
 		8px 10px 10px rgba(0,0,0,0.5),
@@ -110,8 +114,15 @@
 	background:#ccc;    right: 15px; /*newly added*/
     top: -310px;/*newly added*/;margin-bottom=-330px"
          id="over_map">
+<<<<<<< Updated upstream
+         id="over_map">
       Weather : {{ajaxResponse}}
     </div>-->
+
+
+
+      Elevation : {{ajaxResponse}}
+    </div>
     </div>
 
   </template>
@@ -205,11 +216,16 @@
       },
 
         ready: function () {
+
             if (this.long == undefined) {
                 this.long = -71.32294714450836;
+
             }
-            if (this.lat == undefined) {
-                this.lat = 42.3601;
+
+
+            if (this.long == undefined) {
+                this.lat = 42.415896609405564;
+
             }
         },
 
