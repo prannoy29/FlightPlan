@@ -6,6 +6,12 @@
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html" />
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="bower_components/paper-styles/color.html">
+<link rel="import" href="bower_components/paper-styles/demo-pages.html">
+<link rel="import" href="bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="my-icons.html" />
 <link rel="import" href = "css/main.css" />
 <link rel="import" href="shared-styles.html" />
@@ -24,13 +30,23 @@
 
     </style>
       <iron-ajax
-              auto
+
               id='ajaxId'
               method="POST"
               handle-as="text"
               on-response="handleResponse"
               contentType="application/json"
               last-response="{{ajaxResponse}}">
+      </iron-ajax>
+
+      <iron-ajax
+              id='ajaxWeather'
+              method="GET"
+
+              handle-as="json"
+              on-response="handleWeather"
+              contentType="application/json"
+              last-response="{{ajaxResponse1}}">
       </iron-ajax>
 
 
@@ -45,13 +61,29 @@
       <paper-icon-button icon="communication:chat" on-tap="_startFriendChat"></paper-icon-button>
     </div>
   </paper-map-info>
+  "Raster of 500x500 pixels has 1 band and extent of BOX(-71.9542592592635 42.2598148148115,-71.907962962967 42.306111111108)
+    band 1 of pixtype 32BF is in-db with NODATA value of -9999"
   </google-map>-->
 
     <div id="wrapper">
+
+        <!--<paper-button raised onclick="dialogopen">plain dialog</paper-button>
+
+
+        <paper-dialog id="dialog">
+            <h2>Dialog Title</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </paper-dialog>-->
+
+
+
     <div id="mapid">
-    <google-map id="map" click-events = "true" latitude="47.5515" longitude="-101.0020" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
+    <google-map id="map" click-events = "true" longitude="-103.5" latitude ="48.5" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+
      <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
-        <google-map-marker hidden="true" click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
+        <google-map-marker  hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
 
       </google-map-marker>
       <!--</template>-->
@@ -71,7 +103,7 @@
 	padding:15px;
 
 	-webkit-box-shadow:
-		8px 10px 10px rgba(0,0,0,0.5),
+		8px 10px 10px rgba(0,0,0,0.5)
 		inset 8px 10px 10px rgba(255,255,255,0.75);
 	-moz-box-shadow:
 		8px 10px 10px rgba(0,0,0,0.5),
@@ -82,8 +114,15 @@
 	background:#ccc;    right: 15px; /*newly added*/
     top: -310px;/*newly added*/;margin-bottom=-330px"
          id="over_map">
+<<<<<<< Updated upstream
+         id="over_map">
       Weather : {{ajaxResponse}}
     </div>-->
+
+
+
+      Elevation : {{ajaxResponse}}
+    </div>
     </div>
 
   </template>
@@ -94,6 +133,9 @@
 
       properties:{
       contents : Number,
+          weather : {
+              type : Object
+          },
            lat : Number,
           long : Number,
  selectedSalon : {
@@ -111,9 +153,17 @@
 
       },
 
+        dialogopen : function(){
+
+                this.$.dialog.open();
+
+        },
+
       fg: function() {
           var fk = this.contents;
-          var marker = document.createElement('google-map-marker');
+          var wk = this.weather;
+          //var marker = document.createElement('google-map-marker');
+          var xhrWeather = this.$$('#ajaxWeather');
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
           var infoOnMap = this.$$('#infomap');
@@ -136,13 +186,19 @@
 
             this.longi = longitude;
             this.lati = latitude;
-            google.maps.event.trigger(marker, 'click');
+
             xhr.body = {
                 "type": "Point",
                 "coordinates": [this.long , this.lat ]
             };
             xhr.generateRequest();
+            /*localhost:8080/weather/id?lat=45.96&lon=-103.50&date=2017-06-22T8:40:00Z*/
+            var weatherurl = "http://localhost:8080/weather/id?lat="+latitude+"&lon="+ longitude + "&date=2017-06-22T8:40:00Z";
+            xhrWeather.url = encodeURI(weatherurl);
+            xhrWeather.generateRequest();
+
             fk = this.contents;
+            wk = this.weather;
           var uluru = {lat: latitude, lng: longitude};
 
           //iwindow.setContent(fk);
@@ -150,7 +206,7 @@
             var ind = infoContents/100;
 
 
-            infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " feets  <br /><b>Weather : </b>";
+            infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><b>Weather : </b>" + wk.temperature_min_f + " F";
 
           iwindow.setPosition(uluru);
          // iwindow.open(this.map);
@@ -160,11 +216,16 @@
       },
 
         ready: function () {
+
             if (this.long == undefined) {
                 this.long = -71.32294714450836;
+
             }
-            if (this.lat == undefined) {
-                this.lat = 42.3601;
+
+
+            if (this.long == undefined) {
+                this.lat = 42.415896609405564;
+
             }
         },
 
@@ -184,6 +245,10 @@
 
         handleResponse : function(e){
           this.contents = e.detail.response;
+        },
+        handleWeather : function(e){
+            this.weather = e.detail.response;
+            console.log(e.detail.response);
         },
 
         markerClick: function(e) {
