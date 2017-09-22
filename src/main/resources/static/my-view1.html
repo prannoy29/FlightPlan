@@ -72,27 +72,14 @@
         <script>
 
         </script>
-        <!--<div>
+        <div>
         <paper-button on-tap="toggleDialog"  data-args="1">1 dialogs</paper-button>
         <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
             <h2>1</h2>
             <p>Lom officia deserunt mollit anim id est laborum.</p>
         </paper-dialog>
         </div>
-        <div>
-        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
-            <h2>2</h2>
-            <p>Lom officia deserunt mollit anim id est laborum.</p>
-        </paper-dialog>
-        </div>
-        <div></div><paper-button on-tap="toggleDialog">2 dialog</paper-button>
-        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
-            <h2>3</h2>
-            <p>Lom officia deserunt mollit anim id est laborum.</p>
-        </paper-dialog>
-        <div></div><paper-button on-tap="toggleDialog">3 dialog</paper-button>
 
-        </div>-->
 
     <div id="mapid">
     <google-map id="map" click-events = "true" latitude="48.5" longitude="-103.5" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
@@ -156,7 +143,7 @@
           var t = document.querySelector('#pop');
           var xhr = this.$$('#ajaxId');
           var infoOnMap = this.$$('#infomap');
-          var url = 'http://localhost:8080/point/getElevation';
+          var url = 'http://localhost:8080/point/getElevatio';
           xhr.url = encodeURI(url);
           xhr.headers={"Accept": "*/*", "Content-Type": "application/json"};
         var iwindow = new google.maps.InfoWindow();
@@ -194,9 +181,9 @@
             var ind = infoContents/100;
 
             if(!isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
-                infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><b>Weather : </b>" + wk.temperature_min_f + " F";
+                infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><br /><b>" + wk.condition +" </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
             else if(isNaN(ind) && typeof  wk.temperature_min_f !== "undefined")
-                infoOnMap.innerHTML = "<b>Weather : </b>" + wk.temperature_min_f + " F";
+                infoOnMap.innerHTML = "<b>" + wk.condition +" </b><h3>" + wk.temperature_min_f + " F </h3>";
             else if(!isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
                 infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters";
             else if(isNaN(ind) && typeof  wk.temperature_min_f == "undefined")
