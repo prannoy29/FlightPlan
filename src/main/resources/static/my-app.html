@@ -21,6 +21,7 @@
 <link rel="import" href="bower_components/paper-styles/color.html">
 <link rel="import" href="bower_components/paper-styles/demo-pages.html">
 <link rel="import" href="bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <dom-module id="my-app">
     <template id="pop">
@@ -35,10 +36,27 @@
             {color:#616161}
             .drawer-list__link:hover{text-decoration:underline; font-weight: bold; background-color: #f0ecec; color:black}
             .drawer-list__link--active,.drawer-list__link--active:active,.drawer-list__link--active:hover,.drawer-list__link--active:link,.drawer-list__link--active:visited
-            {color:#000;font-weight:500;text-decoration:underline;-webkit-text-decoration-color:#00e871;text-decoration-color:#00e871;text-underline-position:under}
-            .drawer-list__link{display:inline-block;padding:8px`; margin:3%;height:8%; width:97%; position:relative;text-decoration:none}
+            {color:#000;font-weight:500;text-decoration:underline;text-decoration-color: forestgreen;-webkit-text-decoration-color:#00e871;text-underline-position:under}
+            .drawer-list__link{display:inline-block;padding:8px`; margin:3%;height:10%; width:97%; position:relative;text-decoration:none}
         </style>
 
+        <custom-style><style is="custom-style">
+            section {
+                width: 100%;
+                height: 700px;
+                @apply --layout-vertical;
+            }
+            section paper-dialog-scrollable {
+                @apply --layout-flex;
+            }
+            .header {
+                padding: 8px 24px;
+            }
+            .footer {
+                padding: 8px 24px;
+                text-align: right;
+            }
+        </style></custom-style>
 
         <style>
             #wrapper { position: relative; }
@@ -183,8 +201,17 @@
                 tail="{{subroute}}"></app-route>
 
         <app-drawer-layout >
-            <app-drawer id="leftside">
+
+            <app-drawer>
                 <span id="loi">
+
+                     <section>
+                <div class="header">Flight Plan List</div>
+                <paper-dialog-scrollable  id="leftside">
+
+                </paper-dialog-scrollable>
+
+            </section>
 
                 </span>
 
@@ -196,7 +223,7 @@
             <app-header-layout >
                 <app-header >
                     <app-toolbar>
-                       <!-- <paper-icon-button icon="menu"></paper-icon-button>-->
+                        <paper-icon-button icon="menu"></paper-icon-button>
                         <div>Flight Plans</div>
                     </app-toolbar>
                 </app-header>
@@ -487,7 +514,8 @@
                     this.marker.setVisible(false);
                     var latLng1 = new google.maps.LatLng(48.5, -122.5);
                     this.map.panTo(latLng1);
-                    this.$$("#over_map").style.display = "none";
+                    this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").innerHTML = "Weather and location Unknown.";
                 }
                 else if(typeof d[3] !== 'undefined' && typeof d[4] !== 'undefined' && typeof d[5] !== 'undefined') {
                     this.longi1 = d[2];
@@ -503,7 +531,7 @@
                     this.lati1 = d[1];
                     this.map.panTo(this.marker.getPosition());
                     this.marker.setVisible(true);
-                    this.$$("#over_map").innerHTML = "No weather data available.";
+                    this.$$("#over_map").innerHTML = "Weather unknown.";
 
                 }
 
