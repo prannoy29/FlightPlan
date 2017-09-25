@@ -18,6 +18,7 @@
 <link rel="import" href="shared-styles.html" />
 <dom-module id="my-view1">
   <template id="pop">
+
     <style include="shared-styles">
       :host {
         display: block;
@@ -30,12 +31,13 @@
       }
 
     </style>
-      <iron-ajax
 
+
+      <iron-ajax
               id='ajaxId'
               method="POST"
               handle-as="text"
-              on-response="handleResponse"
+              on-response="handleResponseLat"
               on-error="handleError"
               contentType="application/json"
               last-response="{{ajaxResponse}}">
@@ -44,14 +46,11 @@
       <iron-ajax
               id='ajaxWeather'
               method="GET"
-
               handle-as="json"
               on-response="handleWeather"
               on-error="handleWeatherError"
               contentType="application/json"
-              last-response="{{ajaxResponse1}}"
-
-                >
+              last-response="{{ajaxResponse1}}">
       </iron-ajax>
 
 
@@ -73,12 +72,7 @@
 
         </script>
         <div>
-        <paper-button on-tap="toggleDialog"  data-args="1">1 dialogs</paper-button>
-        <paper-dialog  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="dialog">
-            <h2>1</h2>
-            <p>Lom officia deserunt mollit anim id est laborum.</p>
-        </paper-dialog>
-        </div>
+
 
 
     <div id="mapid">
@@ -106,7 +100,7 @@
 
       properties:{
       contents : Number,
-          weather : {
+       weather : {
               type : Object
           },
            lat : Number,
@@ -224,7 +218,7 @@
         },*/
 
 
-        handleResponse : function(e){
+        handleResponseLat : function(e){
           this.contents = e.detail.response;
         },
         handleWeather : function(e){

@@ -50,7 +50,7 @@ public class UavController {
         Login login = response.getBody();
         this.accessToken = login.getAccessToken();
         this.expiresIn = login.getExpiresIn();
-        System.out.println(login.getExpiresIn());
+        //System.out.println(login.getExpiresIn());
         return response;
     }
 
@@ -70,7 +70,7 @@ public class UavController {
         JSONObject obj = new JSONObject(response.getBody());
         //System.out.println(obj.toString());
         JSONArray array = obj.getJSONArray("objectsList");
-        System.out.println(array.length());
+        //System.out.println(array.length());
         return response;
     }
 
@@ -144,7 +144,7 @@ public class UavController {
 
         builder.append(modifyDate(date));
         String id = builder.toString();
-        System.out.println(id);
+        //System.out.println(id);
         if(repository.getData(id).getId() == null){
             throw new NullPointerException("No weather data for the given date and time at the location");
         }
