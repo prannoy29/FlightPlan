@@ -7,7 +7,7 @@ public class GeoPoint {
     private double lat;
     private double lon;
 
-    public GeoPoint(double lat, double lon) {
+    public GeoPoint(double lon, double lat) {
         this.lat = lat;
         this.lon = lon;
     }

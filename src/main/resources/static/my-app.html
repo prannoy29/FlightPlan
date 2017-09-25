@@ -1,5 +1,6 @@
 <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
 <link rel="import" href="bower_components/polymer/polymer.html" />
+<link rel="import" href="bower_components/google-map/google-map-marker.html" />
 <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html" />
 <link rel="import" href="bower_components/app-layout/app-drawer-layout/app-drawer-layout.html" />
 <link rel="import" href="bower_components/app-layout/app-header/app-header.html" />
@@ -7,14 +8,70 @@
 <link rel="import" href="bower_components/app-layout/app-scroll-effects/app-scroll-effects.html" />
 <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html" />
 <link rel="import" href="bower_components/app-route/app-location.html" />
+<link rel="import" href="bower_components/polyline/src/polyline.js" />
 <link rel="import" href="bower_components/app-route/app-route.html" />
 <link rel="import" href="bower_components/iron-pages/iron-pages.html" />
 <link rel="import" href="bower_components/iron-selector/iron-selector.html" />
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="bower_components/google-map/google-map.html" />
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="bower_components/paper-styles/color.html">
+<link rel="import" href="bower_components/paper-styles/demo-pages.html">
+<link rel="import" href="bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <dom-module id="my-app">
-    <template id="mypop">
+    <template id="pop">
+
         <style>
+
+            .drawer-list__link,
+
+            .drawer-list__link:active,
+
+            .drawer-list__link:hover,.drawer-list__link:link,.drawer-list__link:visited
+            {color:#616161}
+            .drawer-list__link:hover{text-decoration:underline; font-weight: bold; background-color: #f0ecec; color:black}
+            .drawer-list__link--active,.drawer-list__link--active:active,.drawer-list__link--active:hover,.drawer-list__link--active:link,.drawer-list__link--active:visited
+            {color:#000;font-weight:500;text-decoration:underline;text-decoration-color: forestgreen;-webkit-text-decoration-color:#00e871;text-underline-position:under}
+            .drawer-list__link{display:inline-block;padding:8px`; margin:3%;height:10%; width:97%; position:relative;text-decoration:none}
+        </style>
+
+        <custom-style><style is="custom-style">
+            section {
+                width: 100%;
+                height: 700px;
+                @apply --layout-vertical;
+            }
+            section paper-dialog-scrollable {
+                @apply --layout-flex;
+            }
+            .header {
+                padding: 8px 24px;
+            }
+            .footer {
+                padding: 8px 24px;
+                text-align: right;
+            }
+        </style></custom-style>
+
+        <style>
+            #wrapper { position: relative; }
+            #over_map {
+                display : none;
+                position: absolute;
+                top: 30px;
+                right: 20px;
+                z-index: 99;
+                background-color: white;
+                padding: 15px;
+                border: 2px solid red;
+                border-radius: 8px;
+            }
+
             :host {
                 --app-primary-color: #4285f4;
                 --app-secondary-color: black;
@@ -54,9 +111,10 @@
         </style>
         <style>
             google-map {
-                height: 900px;
+                height: 100%;
             }
         </style>
+
 
         <iron-ajax
                 auto
@@ -65,9 +123,29 @@
                 url = "/profile"
                 handle-as="json"
                 on-response="handleResponse1"
-
-
                 last-response="{{ajaxResponse}}">
+        </iron-ajax>
+
+        <!--latLong-->
+        <iron-ajax
+                id='ajaxId2'
+                method="POST"
+                handle-as="text"
+                on-response="handleResponseLat"
+                on-error="handleError"
+                contentType="application/json"
+              last-response="{{ajaxResponse}}">
+        </iron-ajax>
+
+        <!--weather-->
+        <iron-ajax
+                id='ajaxWeather'
+                method="GET"
+                handle-as="json"
+                on-response="handleWeather"
+                on-error="handleWeatherError"
+                contentType="application/json"
+                last-response="{{ajaxResponse1}}">
         </iron-ajax>
 
         <iron-ajax
@@ -82,18 +160,38 @@
         <!--contentType="application/json"-->
 
 
-
-        <div style="height: 400px;">
+        <!--<div style="height: 400px;">
             <div class="panel-contents">
+
+            </div>-->
+        </div>
+
+
+        <div id="wrapper">
+
+
+        <div id="mapid">
+            <google-map id="map" click-events = "true" latitude="48.5" longitude="-103.5" fit-to-markers on-click="fg" map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
+                <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
+                <google-map-marker   hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
+
+                </google-map-marker>
+                <google-map-marker marker={{marker}} latitude="{{lati1}}" longitude="{{longi1}}">
+
+                </google-map-marker>
+                <!--</template>-->
+                <paper-map-info id="myinfocard" style="padding:2px; opacity:0.8" fade-in>
+                    <div style="padding:2px" id="infomap">
+
+                    </div>
+                </paper-map-info>
+            </google-map>
+
+        </div>
+            <div id="over_map">
 
             </div>
         </div>
-        <!-- <google-map fit-to-marker api-key="AIzaSyCGIdlRk3G2FNSRFg-1jQR2twJrrXrFDW4">
-          <google-map-marker latitude="37.78" longitude="-122.4" draggable="true">
-
-
-        </google-map-marker>
-        </google-map> -->
 
         <app-location route="{{route}}"></app-location>
         <app-route
@@ -103,21 +201,30 @@
                 tail="{{subroute}}"></app-route>
 
         <app-drawer-layout >
-            <app-drawer id="leftside">
+
+            <app-drawer>
                 <span id="loi">
+
+                     <section>
+                <div class="header">Flight Plan List</div>
+                <paper-dialog-scrollable  id="leftside">
+
+                </paper-dialog-scrollable>
+
+            </section>
 
                 </span>
 
-                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <!--<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <a name="view1">Map</a>
-                </iron-selector>
+                </iron-selector>-->
             </app-drawer>
 
             <app-header-layout >
                 <app-header >
                     <app-toolbar>
                         <paper-icon-button icon="menu"></paper-icon-button>
-                        <div>My App</div>
+                        <div>Flight Plans</div>
                     </app-toolbar>
                 </app-header>
 
@@ -128,9 +235,8 @@
                         fallback-selection="view404"
                         role="main">
 
-                    <my-view1 name="view1"></my-view1>
-                    <my-view2 name="view2"></my-view2>
-                    <my-view3 name="view3"></my-view3>
+                    <!--<my-view1 name="view1"></my-view1>-->
+
                     <my-view404 name="view404"></my-view404>
                 </iron-pages>
 
@@ -144,7 +250,33 @@
             is: 'my-app',
 
             properties: {
-                contents : String,
+                contents : Number,
+                weather : {
+                    type : Object
+                },
+                lat : Number,
+                long : Number,
+                selectedSalon : {
+                    type : Object
+                },
+                map : {
+                    type : Object
+                },
+                marker : {
+                    type : Object
+                },
+                lati : {
+                    type : Number
+                },
+                longi : {
+                    type : Number
+                },
+                lati1 : {
+                    type : Number
+                },
+                longi1 : {
+                    type : Number
+                },
                 page: {
                     type: String,
                     reflectToAttribute: true,
@@ -166,13 +298,134 @@
             },
 */
 
-            /*ready: function() {
-                var xhr = this.$$('#ajaxId');
-                xhr.generateRequest;
-                var xhr1 = this.$$('#ajaxId1');
-                xhr1.generateRequest;
+            ready: function() {
+                var ls = this.$$('#leftside');
+                node = document.createElement('paper-button');
+                node.setAttribute('class', 'drawer-list__link');
 
+
+                node.innerHTML = "Home <br />";
+
+                node.setAttribute('data-args', 'default');
+                ls.appendChild(node);
+                this.listen(node, 'click', 'clickSetMarker');
+                this.lati = 48.5;
+                this.longi = 103.5;
+
+        },
+
+
+
+            toggleDialog: function(e) {
+                var args = e.target.getAttribute('data-args');
+
+
+                this.$.dialog.toggle();
+
+            },
+
+
+            fg: function() {
+                var fk;
+                var wk;
+                //var marker = document.createElement('google-map-marker');
+                var xhrWeather = this.$$('#ajaxWeather');
+                var t = document.querySelector('#pop');
+                var xhr = this.$$('#ajaxId2');
+                var infoOnMap = this.$$('#infomap');
+                var url = 'http://localhost:8080/point/getElevatio';
+                xhr.url = encodeURI(url);
+                xhr.headers={"Accept": "*/*", "Content-Type": "application/json"};
+                var iwindow = new google.maps.InfoWindow();
+
+
+
+                google.maps.event.addListener(this.map, 'click', function(e) {
+
+
+                    var latitude = e.latLng.lat();
+                    this.lat = latitude;
+
+                    var longitude = e.latLng.lng();
+                    this.long = longitude;
+
+
+                    this.longi = longitude;
+                    this.lati = latitude;
+
+                    xhr.body = {
+                        "type": "Point",
+                        "coordinates": [this.long , this.lat ]
+                    };
+                    xhr.generateRequest();
+                    var weatherurl = "http://localhost:8080/weather/id?lat="+latitude+"&lon="+ longitude + "&date=2017-06-22T8:40:00Z";
+                    xhrWeather.url = encodeURI(weatherurl);
+                    xhrWeather.generateRequest();
+
+                    fk = this.contents;
+                    wk = this.weather;
+                    var uluru = {lat: latitude, lng: longitude};
+
+                    //iwindow.setContent(fk);
+                    var infoContents = Math.round(parseFloat(fk) * 100);
+                    var ind = infoContents/100;
+                    if(fk !== 'Null' && typeof  wk.temperature_min_f !== "undefined")
+                        infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><br /><b>" + wk.condition +" </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
+                    else if(fk === 'Null' && typeof  wk.temperature_min_f !== "undefined")
+                        infoOnMap.innerHTML = "<b>" + wk.condition +"</b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>"
+                    else if(fk !== 'Null' && typeof  wk.temperature_min_f == "undefined")
+                        infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters";
+                    else if(fk === 'Null' && typeof  wk.temperature_min_f == "undefined")
+                        infoOnMap.innerHTML = "No data Available";
+
+
+                    iwindow.setPosition(uluru);
+                }.bind(this));
+
+
+            },
+            ondialog : function(){
+                this.$.dialog.open();
+
+            },
+
+
+
+            /*attached: function () {
+                var xhr = this.$$('#ajaxId');
+                var url = 'http://localhost:8080/point/getElevatio';
+                xhr.url = encodeURI(url);
+                xhr.headers={"Accept": "*!/!*", "Content-Type": "application/json"};
+                xhr.body = {
+                    "type": "Point",
+                    "coordinates": [this.lat , this.long ]
+                };
+
+                xhr.generateRequest();
             },*/
+
+
+            handleResponseLat : function(e){
+                this.contents = e.detail.response;
+            },
+
+            handleError : function(e){
+                this.contents = 'Null';
+            },
+
+            handleWeather : function(e){
+                this.weather = e.detail.response;
+
+            },
+
+            handleWeatherError : function(e){
+                this.weather = "No data Available";
+            },
+            markerClick: function(e) {
+
+                //this.selectedSalon = e.model.get('s');
+                this.$.myinfocard.showInfoWindow(e.srcElement.marker);
+            },
 
             _pageChanged: function(page) {
                 var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
@@ -183,28 +436,112 @@
                 this.page = 'view404';
             },
 
+
+
+
+
             handleResponse : function(e){
                 var flightlist = [];
+                var wayptlen;
+                var clicklati = 0;
+                var clicklongi = 0;
+                var clickweather = [];
                 var flightstatuslist = [];
                 var ls = this.$$('#leftside');
                 var responses = e.detail.response;
-                console.log(responses.objectsList);
                 responses = responses.objectsList;
                 var len = responses.length;
                 for(var i = 0; i < len; i++){
+                    var wayPoint = responses[i].flight_plan_details.waypoints_info;
+                    if (wayPoint.length === 0)
+                    {
+                        wayptlen = 0;
+                    /*clicklati = 'Null'; clicklongi = 'Null'; clickweather = ['Null'];*/
+                    }
+                    else {
+        /*
+        cloudiness,dew_point,humidity,precipitation_intensity_ft,precipitation_probability,
+        pressure_hpa,temperature_f,temperature_max_f,temperature_min_f,
+        wind_direction_deg,wind_speed_kn
+        */
+                        wayptlen = 1;
+                        clicklati = wayPoint[0].wp_location.coordinates[1];
+                        clicklongi = wayPoint[0].wp_location.coordinates[0];
+                        if(wayPoint[0].wp_props !== null) {
+                            clickweather[0] = wayPoint[0].wp_props.weatherInfo.precipitation_probability;
+                            clickweather[1] = wayPoint[0].wp_props.weatherInfo.temperature_max_f;
+                            clickweather[2] = wayPoint[0].wp_props.weatherInfo.wind_speed_kn;
+
+                        }
+                        else{
+                            clickweather = [];
+                        }
+                    }
+                    var clickcordi = [];
+                    clickcordi[0] = wayptlen;
+                    clickcordi[1] = clicklati;
+                    clickcordi[2] = clicklongi;
+                    clickcordi[3] = clickweather;
+
                     flightlist.push(responses[i].name);
-                    flightstatuslist.push(responses[i].status);
-                    ls.innerHTML +="<p><b> <span style='margin-left: 8px; color:hotpink'>" + flightlist[i] + "</b></span><br><span style='font-size:small;color:blue; float:right; margin-right: 10px' > Status: " + flightstatuslist[i] + "</span></p>";
+                    /*flightstatuslist.push(responses[i].status);*/
+                    /*ls.innerHTML +="<div><paper-button on-tap='toggleDialog' class='drawer-list__link'>" + flightlist[i] + "</paper-button>";
+               */
+                    node = document.createElement('paper-button');
+                    node.setAttribute('class', 'drawer-list__link');
+                    node.innerHTML = flightlist[i];
+                    node.setAttribute('data-args', clickcordi );
+                    ls.appendChild(node);
+                   this.listen(node, 'click', 'clickSetMarker');
+
+                }
+            },
+
+            clickSetMarker: function(e) {
+                if( e.target.getAttribute('data-args') == "default"){
+                    this.marker.setVisible(false);
+                    var latLng1 = new google.maps.LatLng(48.5, -122.5);
+                    this.map.panTo(latLng1);
+                    this.$$("#over_map").style.display = "none";
+
+                }
+
+                var d =  e.target.getAttribute('data-args').split(',');
+
+
+
+                if (d[0] == 0) {
+                    this.marker.setVisible(false);
+                    var latLng1 = new google.maps.LatLng(48.5, -122.5);
+                    this.map.panTo(latLng1);
+                    this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").innerHTML = "Weather and location Unknown.";
+                }
+                else if(typeof d[3] !== 'undefined' && typeof d[4] !== 'undefined' && typeof d[5] !== 'undefined') {
+                    this.longi1 = d[2];
+                    this.lati1 = d[1];
+                    this.map.panTo(this.marker.getPosition());
+                    this.marker.setVisible(true);
+                    this.$$("#over_map").innerHTML = "<b> Ppt probability :" + d[3] +" <br />Wind Speed :" + d[5] +"</b><span style='float:right; font-size:40px; margin-left: 25px; margin-top: -25px'>" + d[4] + " F</span>";
+                    this.$$("#over_map").style.display = "block";
+
+                }
+                else{
+                    this.longi1 = d[2];
+                    this.lati1 = d[1];
+                    this.map.panTo(this.marker.getPosition());
+                    this.marker.setVisible(true);
+                    this.$$("#over_map").innerHTML = "Weather unknown.";
+
                 }
 
 
+                /*var args = e.target.getAttribute('data-args');
+                this.$.dialog.toggle();*/
 
-                console.log(len);
             },
 
             handleResponse1 : function(e){
-                var ls = this.$$('#leftside');
-                console.log(e.detail.response);
                 var xhr1 = this.$$('#ajaxId1');
                 xhr1.generateRequest();
             },
@@ -213,9 +550,8 @@
                 var longitude = event.target.longitude;
                 var latitude = event.target.latitude;
                 alert("longitude");
-                console.log("ll");
-            }
 
+            }
         });
     </script>
 
