@@ -1,6 +1,9 @@
 package demo.components.dao;
 
+import demo.components.domain.GeoPoint;
 import org.springframework.context.annotation.Bean;
+
+import java.util.List;
 
 
 public interface PointDao {
@@ -10,4 +13,6 @@ public interface PointDao {
      * @return returns double elevation
      */
     Double getElevation(String geoJsonPoint);
+
+    List<GeoPoint> getRestrictedPathPoints(String geoJsonLineString,double h1, double h2);
 }
