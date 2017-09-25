@@ -25,9 +25,11 @@ public class PointController {
     }
 
     @RequestMapping(value = "/getRestrictPath",method = RequestMethod.POST)
-    public List<GeoPoint> getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString){
+    public List<GeoPoint> getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString,
+                                          @RequestParam("h1")double h1,
+                                          @RequestParam("h2")double h2){
         String queryLine = geoJsonLineString.toString();
-        List<GeoPoint> pointsLineList= pointDao.getRestrictedPathPoints(queryLine,3,2);
+        List<GeoPoint> pointsLineList= pointDao.getRestrictedPathPoints(queryLine,h1,h2);
         return pointsLineList;
     }
 
