@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zemoso on 12/9/17.
@@ -56,16 +58,17 @@ public class UavController {
 
     @RequestMapping(value="/flightplans",method = RequestMethod.GET)
     public ResponseEntity getFlightPlans(){
-        String url = BaseUrl+"flight_plans";
+        String url = BaseUrl+"flight_plans?start_time=2016-9-1T00:00:00Z";
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization","Bearer "+accessToken);
         headers.add("Content-type","application/json");
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        //Map<String, String> map= new HashMap<>();
+        //map.put("start_time","2016-9-1T00:00:00Z");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        HttpEntity entity = new HttpEntity(headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,request,String.class);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,entity,String.class);
         System.out.println(response.getStatusCode());
         JSONObject obj = new JSONObject(response.getBody());
         //System.out.println(obj.toString());
