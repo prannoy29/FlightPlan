@@ -28,9 +28,20 @@ public class PointController {
     public List<GeoPoint> getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString,
                                           @RequestParam("h1")double h1,
                                           @RequestParam("h2")double h2){
+
         String queryLine = geoJsonLineString.toString();
-        List<GeoPoint> pointsLineList= pointDao.getRestrictedPathPoints(queryLine,h1,h2);
+        System.out.println(queryLine);
+        List<Double> pointsLineX= pointDao.getRestrictedPathPointsX(queryLine,h1,h2);
+        List<Double> pointsLineY= pointDao.getRestrictedPathPointsY(queryLine,h1,h2);
+        List<GeoPoint> pointsLineList = new ArrayList<>();
+        int i=0;
+        while(pointsLineX.size()==pointsLineY.size()&& pointsLineY.size()> i){
+            pointsLineList.add(new GeoPoint(pointsLineX.get(i),pointsLineY.get(i)));
+            i++;
+        }
+
         return pointsLineList;
     }
 
 }
+

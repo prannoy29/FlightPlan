@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -40,12 +41,24 @@ public class PointDaoImpl implements PointDao {
     }
 
     @Override
-    public List<GeoPoint> getRestrictedPathPoints(String geoJsonLineString, double h1, double h2) {
-        String query = "SELECT ST_X((foo.pt).geom) As lon, ST_Y((foo.pt).geom) As lat FROM(SELECT ST_DumpPoints(ST_SetSRID(ST_GeomFromGeoJson('" +
+    public List<Double> getRestrictedPathPointsX(String geoJsonLineString, double h1, double h2) {
+        String query = "SELECT ST_X((foo.pt).geom) As lon FROM(SELECT ST_DumpPoints(ST_SetSRID(ST_GeomFromGeoJson('" +
         geoJsonLineString+"'),4326)) AS pt) As foo JOIN public.n49w104_500 r ON ST_Intersects(r.rast,(foo.pt).geom) " +
                 "WHERE ST_Value(r.rast,(foo.pt).geom) > " + String.valueOf(h1)+" AND ST_Value(r.rast,(foo.pt).geom) > " +String.valueOf(h2) +";";
 
-        List<GeoPoint> pointsList = jdbcTemplate.queryForList(query,GeoPoint.class);
+        List<Double> pointsList = jdbcTemplate.queryForList(query,Double.class);
+        System.out.println(pointsList);
+        return pointsList;
+    }
+
+    @Override
+    public List<Double> getRestrictedPathPointsY(String geoJsonLineString, double h1, double h2) {
+        String query = "SELECT ST_Y((foo.pt).geom) As lat FROM(SELECT ST_DumpPoints(ST_SetSRID(ST_GeomFromGeoJson('" +
+                geoJsonLineString+"'),4326)) AS pt) As foo JOIN public.n49w104_500 r ON ST_Intersects(r.rast,(foo.pt).geom) " +
+                "WHERE ST_Value(r.rast,(foo.pt).geom) > " + String.valueOf(h1)+" AND ST_Value(r.rast,(foo.pt).geom) > " +String.valueOf(h2) +";";
+
+        List<Double> pointsList = jdbcTemplate.queryForList(query,Double.class);
+        System.out.println(pointsList);
         return pointsList;
     }
 

@@ -4,8 +4,8 @@ package demo.components.domain;
  * Created by zemoso on 6/9/17.
  */
 public class GeoPoint {
-    private double lat;
     private double lon;
+    private double lat;
 
     public GeoPoint(double lon, double lat) {
         this.lat = lat;
