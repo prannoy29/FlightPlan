@@ -171,7 +171,7 @@
 
         <!--latLong-->
         <iron-ajax
-                id='ajaxelevation'
+                id='ajaxId2'
                 method="POST"
                 handle-as="text"
                 on-response="handleResponseLat"
@@ -391,7 +391,7 @@
                         "type": "LineString",
                         "coordinates": this.draw_lines
                     };
-            console.log(xhrPath.body);
+           /* console.log(xhrPath.body);*/
                     xhrPath.generateRequest();
             },
 
@@ -464,6 +464,8 @@
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
+                    console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
+
                     this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
                     draw_poly.appendChild(node1);
                 }
@@ -502,14 +504,15 @@
             handlePath : function(e){
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
-                console.log(this.red_lines);
+
                 var draw_poly = this.$$('#polygonred');
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = f[i].lat;
                     node1.longitude = f[i].lon;
-                    draw_poly.appendChild(node1);
-                    console.log(node1.latitude + ',' + node1.longitude);
+                    console.log("Result is :" + node1.latitude + ',' + node1.longitude);
+                    draw_poly.appendChild(node1);/*
+                    console.log(node1.latitude + ',' + node1.longitude);*/
                 }
             },
 
