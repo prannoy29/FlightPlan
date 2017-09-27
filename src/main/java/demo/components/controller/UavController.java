@@ -164,7 +164,7 @@ public class UavController {
 
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        cal.set(Calendar.MONTH,7);
+        cal.set(Calendar.MONTH,8);
         if(hour==23 || hour==0 || hour==1){
             cal.set(Calendar.HOUR_OF_DAY,0);
             if(hour==23){
