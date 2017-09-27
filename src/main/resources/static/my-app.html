@@ -18,6 +18,7 @@
 <link rel="import" href="bower_components/google-map/google-map.html" />
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
 <link rel="import" href="bower_components/paper-styles/color.html">
@@ -104,14 +105,17 @@
         <style>
             #wrapper { position: relative; }
             #over_map {
+                box-shadow: 4px 4px 4px #888888;
+                opacity : 0.70;
                 display : none;
                 position: absolute;
                 top: 30px;
                 right: 20px;
                 z-index: 99;
-                background-color: white;
+                background-color: #4285f4;
+                color : white;
                 padding: 15px;
-                border: 2px solid red;
+                border: 2px solid #4285f4;
                 border-radius: 8px;
             }
 
@@ -376,16 +380,34 @@
                 for(var aa = 0; aa < len; aa++) {
                     A.removeChild(A_child[0]);
                 }
-                if(this.draw_shape == 0) this.draw_shape = 1;
-                else this.draw_shape = 0;
+                if(this.draw_shape == 0) {
+                    this.draw_shape = 1;
+                    this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").style.width = "90px";
+                    this.$$("#over_map").style.height = "80px";
+                    this.$$("#over_map").innerHTML = "Drone height : <br /><paper-input id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input  id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
+
+                }
+                else
+                {
+                    this.draw_shape = 0;
+                    this.$$("#over_map").style.display = "none";
+                }
 
             },
 
             drawtoggle1 : function(){
 
                 var xhrPath = this.$$('#ajaxPath');
-                var url = "http://localhost:8080/getRestrictPath?h1=10&h2=20";
+                this.$$("#over_map").style.display = "none";
+                var finalHeight = this.$$("#finalHeight").value;
+                var initialHeight = this.$$("#initialHeight").value;
+
+
+                var url = "http://localhost:8080/getRestrictPat";
+                /*?h1=10&h2=20*/
                 xhrPath.url = encodeURI(url);
+                xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
                 xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
             xhrPath.body = {
                         "type": "LineString",
