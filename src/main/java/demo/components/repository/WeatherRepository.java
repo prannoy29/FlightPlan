@@ -60,7 +60,7 @@ public class WeatherRepository {
             SearchHit hit = hits.getAt(0);
             JSONObject object = new JSONObject(hit.getSource());
             JSONObject object1 = object.getJSONObject("location");
-            GeoPoint geoPoint = new GeoPoint(object1.getDouble("lat"),object1.getDouble("lon"));
+            GeoPoint geoPoint = new GeoPoint(object1.getDouble("lon"),object1.getDouble("lat"));
             return geoPoint;
         }
 
