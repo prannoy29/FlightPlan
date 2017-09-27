@@ -14,5 +14,6 @@ public interface PointDao {
      */
     Double getElevation(String geoJsonPoint);
 
-    List<GeoPoint> getRestrictedPathPoints(String geoJsonLineString,double h1, double h2);
+    List<Double> getRestrictedPathPointsX(String geoJsonLineString,double h1, double h2);
+    List<Double> getRestrictedPathPointsY(String geoJsonLineString,double h1, double h2);
 }

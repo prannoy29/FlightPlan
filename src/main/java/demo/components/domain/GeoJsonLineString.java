@@ -47,7 +47,7 @@ public class GeoJsonLineString
         for (int i = 0;i<coordinates.size()-1;i++){
             temp = temp + "["+String.valueOf(coordinates.get(i)[0])+","+String.valueOf(coordinates.get(i)[1])+"]"+",";
         }
-        String result = "[" + temp + String.valueOf(coordinates.get(coordinates.size()-1)[0])+ String.valueOf(coordinates.get(coordinates.size()-1)[1])+"]]";
+        String result =   temp + "[" +String.valueOf(coordinates.get(coordinates.size()-1)[0])+","+ String.valueOf(coordinates.get(coordinates.size()-1)[1])+"]]";
         return "{\"type\":\"LineString\",\"coordinates\":"+result+"}";
     }
 }
