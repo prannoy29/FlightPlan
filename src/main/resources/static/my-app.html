@@ -95,7 +95,7 @@
             }
             paper-button.green[active] {
                 background-color: var(--paper-grey-50);
-                color: black;
+                color: darkgrey;
             }
             paper-button.disabled {
                 color: white;
@@ -112,7 +112,7 @@
                 top: 30px;
                 right: 20px;
                 z-index: 99;
-                background-color: #4285f4;
+                background-color: darkblue;
                 color : white;
                 padding: 15px;
                 border: 2px solid #4285f4;
@@ -474,7 +474,7 @@
                     if (fk !== 'Null' && typeof  wk.temperature_min_f !== "undefined")
                         infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><br /><b>" + wk.condition + " </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
                     else if (fk === 'Null' && typeof  wk.temperature_min_f !== "undefined")
-                        infoOnMap.innerHTML = "<b>" + wk.condition + "</b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>"
+                        infoOnMap.innerHTML = "<b>" + wk.condition + "</b><span style='float:right; font-size:20px; margin-left:10px'>" + wk.temperature_min_f + " F</span>"
                     else if (fk !== 'Null' && typeof  wk.temperature_min_f == "undefined")
                         infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters";
                     else if (fk === 'Null' && typeof  wk.temperature_min_f == "undefined")
