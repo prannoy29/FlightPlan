@@ -29,6 +29,17 @@
 <dom-module id="my-app">
     <template id="pop">
 
+        <!----paper-inpu-container-focus-color: blue;
+                --paper-inpu-container-invalid-color: green;-->
+
+        <style is="custom-style">
+            paper-input.whiteInput {
+                --paper-input-container-color: white;
+                --paper-input-container-input-color: white;
+                --paper-input-container-focus-color: white;
+            }
+        </style>
+
         <style>
 
             .drawer-list__link,
@@ -231,7 +242,7 @@
 
             <!---->
             <google-map id="map" click-events = "true" on-google-map-click="fg"
-                        fit-to-markers = "true"
+                        fit-to-markers = "true" zoom={{zoom}}
                         latitude="48.5" longitude="-103.5" fit-to-markers map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
                 <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
                 <google-map-marker   hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
@@ -351,6 +362,9 @@
                 longilast : {
                     type : Number
                 },
+                zoom : {
+                    type : Number
+                },
                 page: {
                     type: String,
                     reflectToAttribute: true,
@@ -455,9 +469,9 @@
                 if(this.draw_shape == 0) {
                     this.draw_shape = 1;
                     this.$$("#over_map").style.display = "block";
-                    this.$$("#over_map").style.width = "90px";
+                    this.$$("#over_map").style.width = "132px";
                     this.$$("#over_map").style.height = "80px";
-                    this.$$("#over_map").innerHTML = "Drone height : <br /><paper-input id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input  id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
+                    this.$$("#over_map").innerHTML = "Drone height (metre):<br /><paper-input class='whiteInput' id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input class='whiteInput' id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
 
                 }
                 else
@@ -472,8 +486,9 @@
                 var xhrPath = this.$$('#ajaxPath');
                 this.$$("#over_map").style.display = "none";
                 var finalHeight = this.$$("#finalHeight").value;
+                finalHeight = parseInt(finalHeight)*3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
-
+                initialHeight = parseInt(initialHeight)*3.28084;
 
                 var url = "http://localhost:8080/getRestrictPath";
                 /*?h1=10&h2=20*/
@@ -498,7 +513,7 @@
                 node.innerHTML = "Home <br />";
                 node.setAttribute('data-args', 'default');
                 ls.appendChild(node);
-                this.listen(node, 'click', 'clickSetMarker');
+                this.listen(node, 'click', 'clickSetHome');
                 this.lati = 48.5;
                 this.longi = 103.5;
            },
@@ -566,8 +581,6 @@
             },
 
             handlePathError : function(e){
-
-
             },
 
             handleWeatherError : function(e){
@@ -654,9 +667,14 @@
                 }
             },
 
+            clickSetHome: function () {
+                var latLng1 = new google.maps.LatLng(48.5, -103.5);
+                this.map.panTo(latLng1);
+                this.$$("#over_map").style.display = "none";
+            },
+
             clickSetMarker: function(e) {
                 this.draw_shape = 0;
-
                 var A = this.$$('#polygonflight');
                 var A_child = A.childNodes;
                 var len = A_child.length;
@@ -665,7 +683,7 @@
                 }
                 if( e.target.getAttribute('data-args') == "default"){
                     this.marker.setVisible(false);
-                    var latLng1 = new google.maps.LatLng(48.5, -122.5);
+                    var latLng1 = new google.maps.LatLng(48.5, -103.5);
                     this.map.panTo(latLng1);
                     this.$$("#over_map").style.display = "none";
                 }
@@ -676,7 +694,7 @@
 
                 if (d[1] == 0 || d[0] == 0) {
                     this.marker.setVisible(false);
-                    var latLng111 = new google.maps.LatLng(48.5, -122.5);
+                    var latLng111 = new google.maps.LatLng(48.5, -103.5);
                     this.map.panTo(latLng111);
                     this.$$("#over_map").style.display = "block";
                     this.$$("#over_map").style.width = "180px";
@@ -685,6 +703,7 @@
                 }
                 else {
                     console.log(d);
+                    this.zoom = 14;
                     console.log("1 = " + d[1]);
                     for (var path_f = 2; path_f < (2 + leng); path_f++) {
                         var draw_pol = this.$$('#polygonflight');
