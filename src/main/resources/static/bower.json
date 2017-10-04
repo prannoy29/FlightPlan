@@ -24,7 +24,9 @@
     "plastic-map-info": "^0.0.6",
     "google-map-markerclusterer": "^1.0.2",
     "snazzy-info-window": "^1.1.0",
-    "polyline": "^0.2.0"
+    "polyline": "^0.2.0",
+    "px-spinner": "^2.1.0",
+    "px-validation": "^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
