@@ -69,6 +69,13 @@ style this element.
 <dom-module id="paper-input">
   <template>
     <style>
+
+      paper-input-decorator[focused] /deep/ .floating-label,
+      paper-input-decorator[focused] /deep/ .label-text {
+        /* floating label color when the input is focused */
+        color: white !important;
+      }
+
       :host {
         display: block;
       }
@@ -80,7 +87,6 @@ style this element.
       :host([hidden]) {
         display: none !important;
       }
-
       input {
         position: relative; /* to make a stacking context */
         outline: none;

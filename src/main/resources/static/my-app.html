@@ -29,6 +29,17 @@
 <dom-module id="my-app">
     <template id="pop">
 
+        <!----paper-inpu-container-focus-color: blue;
+                --paper-inpu-container-invalid-color: green;-->
+
+        <style is="custom-style">
+            paper-input.whiteInput {
+                --paper-input-container-color: white;
+                --paper-input-container-input-color: white;
+                --paper-input-container-focus-color: white;
+            }
+        </style>
+
         <style>
 
             .drawer-list__link,
@@ -228,29 +239,37 @@
         </div>
         <div id="wrapper">
         <div id="mapid">
-            <google-map id="map" click-events = "true"
-                        on-google-map-click="fg"
+
+            <!---->
+            <google-map id="map" click-events = "true" on-google-map-click="fg"
+                        fit-to-markers = "true" zoom={{zoom}}
                         latitude="48.5" longitude="-103.5" fit-to-markers map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
                 <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
                 <google-map-marker   hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
                 </google-map-marker>
+
+                <google-map-poly id="polygonflight"  stroke-weight="12"  click-events = "true" clickable="true" on-google-map-poly-click="polyclick">
+                </google-map-poly>
+
+
                 <google-map-poly id="polygon">
                 </google-map-poly>
                 <google-map-poly stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000" id="polygonred">
                 </google-map-poly>
                 <google-map-marker marker={{marker}} latitude="{{lati1}}" longitude="{{longi1}}">
                 </google-map-marker>
+                <google-map-marker   hidden="true"  latitude="{{latilast}}" longitude="{{longilast}}">
+                </google-map-marker>
+
                 <!--</template>-->
                 <paper-map-info id="myinfocard" style="padding:2px; opacity:0.8" fade-in>
                     <div style="padding:2px" id="infomap">
-
                     </div>
                 </paper-map-info>
             </google-map>
 
         </div>
             <div id="over_map">
-
             </div>
         </div>
 
@@ -337,6 +356,15 @@
                 longi1 : {
                     type : Number
                 },
+                latilast : {
+                    type : Number
+                },
+                longilast : {
+                    type : Number
+                },
+                zoom : {
+                    type : Number
+                },
                 page: {
                     type: String,
                     reflectToAttribute: true,
@@ -365,83 +393,16 @@
                 var xhr = this.$$('#ajaxId');
                 xhr.generateRequest();
             },
+
+
+
 */
-
-            drawtoggle : function(){
-                var A = this.$$('#polygon');
-                var A_child = A.childNodes;
-                var len = A_child.length;
-                for(var aa = 0; aa < len; aa++) {
-                    A.removeChild(A_child[0]);
-                }
-                var A = this.$$('#polygonred');
-                var A_child = A.childNodes;
-                var len = A_child.length;
-                for(var aa = 0; aa < len; aa++) {
-                    A.removeChild(A_child[0]);
-                }
-                if(this.draw_shape == 0) {
-                    this.draw_shape = 1;
-                    this.$$("#over_map").style.display = "block";
-                    this.$$("#over_map").style.width = "90px";
-                    this.$$("#over_map").style.height = "80px";
-                    this.$$("#over_map").innerHTML = "Drone height : <br /><paper-input id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input  id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
-
-                }
-                else
-                {
-                    this.draw_shape = 0;
-                    this.$$("#over_map").style.display = "none";
-                }
-
-            },
-
-            drawtoggle1 : function(){
-
-                var xhrPath = this.$$('#ajaxPath');
-                this.$$("#over_map").style.display = "none";
-                var finalHeight = this.$$("#finalHeight").value;
-                var initialHeight = this.$$("#initialHeight").value;
-
-
-                var url = "http://localhost:8080/getRestrictPat";
-                /*?h1=10&h2=20*/
-                xhrPath.url = encodeURI(url);
-                xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
-                xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
-            xhrPath.body = {
-                        "type": "LineString",
-                        "coordinates": this.draw_lines
-                    };
-            console.log(xhrPath.body);
-                    xhrPath.generateRequest();
-            },
-
-                ready: function() {
-                this.draw_lines = [];
-                this.red_lines = [];
-                this.draw_shape = 0;
-                var ls = this.$$('#headerFP');
-                node = document.createElement('paper-button');
-                node.setAttribute('class', 'drawer-list__link');
-                node.innerHTML = "Home <br />";
-                node.setAttribute('data-args', 'default');
-                ls.appendChild(node);
-                this.listen(node, 'click', 'clickSetMarker');
-                this.lati = 48.5;
-                this.longi = 103.5;
-           },
-
-            toggleDialog: function(e) {
-                var args = e.target.getAttribute('data-args');
-                this.$.dialog.toggle();
-
-            },
-
-            fg: function(e) {
+            polyclick : function(e){
+                console.log(e);
+                var latitude =e.detail.latLng.lat();
+                var longitude = e.detail.latLng.lng();
                 var fk;
                 var wk;
-                //var marker = document.createElement('google-map-marker');
                 var xhrWeather = this.$$('#ajaxWeather');
                 var t = document.querySelector('#pop');
                 var xhr = this.$$('#ajaxId2');
@@ -482,6 +443,90 @@
                     iwindow.setPosition(uluru);
                 }
                 else{
+                    var draw_poly = this.$$('#polygon');
+                    var node1 = document.createElement('google-map-point');
+                    node1.latitude = e.detail.latLng.lat();
+                    node1.longitude = e.detail.latLng.lng();
+                    this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
+                    draw_poly.appendChild(node1);
+                }
+
+            },
+
+            drawtoggle : function(){
+                var A = this.$$('#polygon');
+                var A_child = A.childNodes;
+                var len = A_child.length;
+                for(var aa = 0; aa < len; aa++) {
+                    A.removeChild(A_child[0]);
+                }
+                var A = this.$$('#polygonred');
+                var A_child = A.childNodes;
+                var len = A_child.length;
+                for(var aa = 0; aa < len; aa++) {
+                    A.removeChild(A_child[0]);
+                }
+                if(this.draw_shape == 0) {
+                    this.draw_shape = 1;
+                    this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").style.width = "132px";
+                    this.$$("#over_map").style.height = "80px";
+                    this.$$("#over_map").innerHTML = "Drone height (metre):<br /><paper-input class='whiteInput' id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input class='whiteInput' id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
+
+                }
+                else
+                {
+                    this.draw_shape = 0;
+                    this.$$("#over_map").style.display = "none";
+                }
+
+            },
+
+            drawtoggle1 : function(){
+                var xhrPath = this.$$('#ajaxPath');
+                this.$$("#over_map").style.display = "none";
+                var finalHeight = this.$$("#finalHeight").value;
+                finalHeight = parseInt(finalHeight)*3.28084;
+                var initialHeight = this.$$("#initialHeight").value;
+                initialHeight = parseInt(initialHeight)*3.28084;
+
+                var url = "http://localhost:8080/getRestrictPath";
+                /*?h1=10&h2=20*/
+                xhrPath.url = encodeURI(url);
+                xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
+                xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
+            xhrPath.body = {
+                        "type": "LineString",
+                        "coordinates": this.draw_lines
+                    };
+            console.log(xhrPath.body);
+                    xhrPath.generateRequest();
+            },
+
+            ready: function() {
+                this.draw_lines = [];
+                this.red_lines = [];
+                this.draw_shape = 0;
+                var ls = this.$$('#headerFP');
+                node = document.createElement('paper-button');
+                node.setAttribute('class', 'drawer-list__link');
+                node.innerHTML = "Home <br />";
+                node.setAttribute('data-args', 'default');
+                ls.appendChild(node);
+                this.listen(node, 'click', 'clickSetHome');
+                this.lati = 48.5;
+                this.longi = 103.5;
+           },
+
+            toggleDialog: function(e) {
+                var args = e.target.getAttribute('data-args');
+                this.$.dialog.toggle();
+
+            },
+
+            fg: function(e) {
+
+                if(this.draw_shape !== 0) {
                     var draw_poly = this.$$('#polygon');
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = e.detail.latLng.lat();
@@ -536,8 +581,6 @@
             },
 
             handlePathError : function(e){
-
-
             },
 
             handleWeatherError : function(e){
@@ -561,15 +604,17 @@
             handleResponse : function(e){
                 var flightlist = [];
                 var wayptlen;
-                var clicklati = 0;
-                var clicklongi = 0;
-                var clickweather = [];
                 var flightstatuslist = [];
                 var ls = this.$$('#leftside');
                 var responses = e.detail.response;
+                console.log(responses);
                 responses = responses.objectsList;
                 var len = responses.length;
+                console.log(responses);
                 for(var i = 0; i < len; i++){
+                    var clicklati = [];
+                    var clicklongi = [];
+                    var clickweather = [];
                     var wayPoint = responses[i].flight_plan_details.waypoints_info;
                     if (wayPoint == null)
                     {
@@ -583,8 +628,11 @@
         wind_direction_deg,wind_speed_kn
         */
                         wayptlen = 1;
-                        clicklati = wayPoint[0].wp_location.coordinates[1];
-                        clicklongi = wayPoint[0].wp_location.coordinates[0];
+                        for(var pathlati = 0; pathlati < wayPoint.length; pathlati++) {
+                            clicklati.push(wayPoint[pathlati].wp_location.coordinates[1]);
+                            clicklongi.push(wayPoint[pathlati].wp_location.coordinates[0]);
+                        }
+
                         if(wayPoint[0].wp_props !== null) {
                             clickweather[0] = wayPoint[0].wp_props.weatherInfo.precipitation_probability;
                             clickweather[1] = wayPoint[0].wp_props.weatherInfo.temperature_max_f;
@@ -597,10 +645,14 @@
                     }
                     var clickcordi = [];
                     clickcordi[0] = wayptlen;
-                    clickcordi[1] = clicklati;
-                    clickcordi[2] = clicklongi;
-                    clickcordi[3] = clickweather;
-
+                    if(wayptlen !== 0)
+                        clickcordi[1] = wayPoint.length;
+                    else
+                        clickcordi[1] = 0;
+                    clickcordi[2] = clicklati;
+                    clickcordi[3] = clicklongi;
+                    clickcordi[4] = clickweather;
+                    console.log("Latitude iss : " + clickcordi[2]);
                     flightlist.push(responses[i].name);
                     /*flightstatuslist.push(responses[i].status);*/
                     /*ls.innerHTML +="<div><paper-button on-tap='toggleDialog' class='drawer-list__link'>" + flightlist[i] + "</paper-button>";
@@ -610,47 +662,73 @@
                     node.innerHTML = flightlist[i];
                     node.setAttribute('data-args', clickcordi );
                     ls.appendChild(node);
-                   this.listen(node, 'click', 'clickSetMarker');
+                    this.listen(node, 'click', 'clickSetMarker');
 
                 }
             },
 
+            clickSetHome: function () {
+                var latLng1 = new google.maps.LatLng(48.5, -103.5);
+                this.map.panTo(latLng1);
+                this.$$("#over_map").style.display = "none";
+            },
+
             clickSetMarker: function(e) {
+                this.draw_shape = 0;
+                var A = this.$$('#polygonflight');
+                var A_child = A.childNodes;
+                var len = A_child.length;
+                for(var aa = 0; aa < len; aa++) {
+                    A.removeChild(A_child[0]);
+                }
                 if( e.target.getAttribute('data-args') == "default"){
                     this.marker.setVisible(false);
-                    var latLng1 = new google.maps.LatLng(48.5, -122.5);
+                    var latLng1 = new google.maps.LatLng(48.5, -103.5);
                     this.map.panTo(latLng1);
                     this.$$("#over_map").style.display = "none";
-
                 }
-
+                /*console.log(e.target.getAttribute('data-args'));
+                */
                 var d =  e.target.getAttribute('data-args').split(',');
+                var leng = parseInt(d[1]);
 
-
-
-                if (d[0] == 0) {
+                if (d[1] == 0 || d[0] == 0) {
                     this.marker.setVisible(false);
-                    var latLng1 = new google.maps.LatLng(48.5, -122.5);
-                    this.map.panTo(latLng1);
+                    var latLng111 = new google.maps.LatLng(48.5, -103.5);
+                    this.map.panTo(latLng111);
                     this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").style.width = "180px";
+                    this.$$("#over_map").style.height = "50px";
                     this.$$("#over_map").innerHTML = "Weather and location Unknown.";
                 }
-                else if(typeof d[3] !== 'undefined' && typeof d[4] !== 'undefined' && typeof d[5] !== 'undefined') {
-                    this.longi1 = d[2];
-                    this.lati1 = d[1];
+                else {
+                    console.log(d);
+                    this.zoom = 14;
+                    console.log("1 = " + d[1]);
+                    for (var path_f = 2; path_f < (2 + leng); path_f++) {
+                        var draw_pol = this.$$('#polygonflight');
+                        var node1 = document.createElement('google-map-point');
+                        node1.latitude = d[path_f];
+                        node1.longitude = d[path_f + leng];
+                        console.log(node1.latitude + " , " + node1.longitude);
+                        draw_pol.appendChild(node1);
+                    }
+                    this.longi1 = d[2 + leng];
+                    this.lati1 = d[2];
+                    this.longilast = d[2 + leng];
+                    this.latilast = d[2];
                     this.map.panTo(this.marker.getPosition());
                     this.marker.setVisible(true);
-                    this.$$("#over_map").innerHTML = "<b> Ppt probability :" + d[3] +" <br />Wind Speed :" + d[5] +"</b><span style='float:right; font-size:40px; margin-left: 25px; margin-top: -25px'>" + d[4] + " F</span>";
                     this.$$("#over_map").style.display = "block";
+                    this.$$("#over_map").style.width = "180px";
+                    this.$$("#over_map").style.height = "50px";
 
-                }
-                else{
-                    this.longi1 = d[2];
-                    this.lati1 = d[1];
-                    this.map.panTo(this.marker.getPosition());
-                    this.marker.setVisible(true);
-                    this.$$("#over_map").innerHTML = "Weather unknown.";
-
+                    if (d[d.length - 1] !== '' && d[d.length - 2] !== '' && d[d.length - 3] !== '' && typeof d[d.length - 1] !== 'undefined' && typeof d[d.length - 2] !== 'undefined' && typeof d[d.length - 3] !== 'undefined') {
+                        this.$$("#over_map").innerHTML = "<b> Ppt probability :" + d[d.length - 3] + " <br />Wind Speed :" + d[d.length - 1] + "</b><span style='float:right; font-size:40px; margin-left: 25px; margin-top: -25px'>" + d[d.length - 2] + " F</span>";
+                    }
+                    else {
+                        this.$$("#over_map").innerHTML = "Weather unknown.";
+                    }
                 }
 
 
