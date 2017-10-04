@@ -38,7 +38,7 @@ public class PointController {
         while(pointsLineX.size()==pointsLineY.size()&& pointsLineY.size()> i){
             pointsLineList.add(new GeoPoint(pointsLineX.get(i),pointsLineY.get(i)));
             i++;
-        } 
+        }
         return pointsLineList;
     }
 
