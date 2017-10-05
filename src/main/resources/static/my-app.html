@@ -398,7 +398,7 @@
 
 */
             polyclick : function(e){
-                console.log(e);
+
                 var latitude =e.detail.latLng.lat();
                 var longitude = e.detail.latLng.lng();
                 var fk;
@@ -499,7 +499,7 @@
                         "type": "LineString",
                         "coordinates": this.draw_lines
                     };
-            console.log(xhrPath.body);
+
                     xhrPath.generateRequest();
             },
 
@@ -525,7 +525,6 @@
             },
 
             fg: function(e) {
-
                 if(this.draw_shape !== 0) {
                     var draw_poly = this.$$('#polygon');
                     var node1 = document.createElement('google-map-point');
@@ -569,14 +568,18 @@
             handlePath : function(e){
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
-                console.log(this.red_lines);
+                var mapElement = this.$$('#map');
                 var draw_poly = this.$$('#polygonred');
                 for(var i = 0; i < f.length; i++){
-                    var node1 = document.createElement('google-map-point');
-                    node1.latitude = f[i].lat;
-                    node1.longitude = f[i].lon;
-                    draw_poly.appendChild(node1);
-                    console.log(node1.latitude + ',' + node1.longitude);
+                    var node1 = document.createElement('google-map-poly');
+                    mapElement.appendChild(node1);
+                    for(var j = 0; j < f[i].length; j++) {
+                        var node2 = document.createElement('google-map-point');
+                        node2.latitude = f[i][j].lat;
+                        node2.longitude = f[i][j].lon;
+                        node1.appendChild(node2);
+                        console.log(i + " is : " + node2.latitude + ',' + node2.longitude);
+                    }
                 }
             },
 
@@ -607,10 +610,8 @@
                 var flightstatuslist = [];
                 var ls = this.$$('#leftside');
                 var responses = e.detail.response;
-                console.log(responses);
                 responses = responses.objectsList;
                 var len = responses.length;
-                console.log(responses);
                 for(var i = 0; i < len; i++){
                     var clicklati = [];
                     var clicklongi = [];
@@ -652,7 +653,6 @@
                     clickcordi[2] = clicklati;
                     clickcordi[3] = clicklongi;
                     clickcordi[4] = clickweather;
-                    console.log("Latitude iss : " + clickcordi[2]);
                     flightlist.push(responses[i].name);
                     /*flightstatuslist.push(responses[i].status);*/
                     /*ls.innerHTML +="<div><paper-button on-tap='toggleDialog' class='drawer-list__link'>" + flightlist[i] + "</paper-button>";
@@ -702,15 +702,12 @@
                     this.$$("#over_map").innerHTML = "Weather and location Unknown.";
                 }
                 else {
-                    console.log(d);
                     this.zoom = 14;
-                    console.log("1 = " + d[1]);
                     for (var path_f = 2; path_f < (2 + leng); path_f++) {
                         var draw_pol = this.$$('#polygonflight');
                         var node1 = document.createElement('google-map-point');
                         node1.latitude = d[path_f];
                         node1.longitude = d[path_f + leng];
-                        console.log(node1.latitude + " , " + node1.longitude);
                         draw_pol.appendChild(node1);
                     }
                     this.longi1 = d[2 + leng];
