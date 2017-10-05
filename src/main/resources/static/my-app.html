@@ -506,6 +506,11 @@
                 finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
                 initialHeight = parseInt(initialHeight)/3.28084;
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> f70b67d2d372d1a3cb2eafbf7408a140af954e05
                 var url = "http://localhost:8080/getRestrictPath";
                 initialHeight = parseInt(initialHeight)*3.28084;
                 xhrPath.url = encodeURI(url);
@@ -531,7 +536,7 @@
                 ls.appendChild(node);
                 this.listen(node, 'click', 'clickSetHome');
                 this.lati = 48.5;
-                this.longi = 103.5;
+                this.longi = -103.5;
            },
 
             toggleDialog: function(e) {
@@ -547,7 +552,6 @@
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
                     console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
-
                     this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
                     draw_poly.appendChild(node1);
                 }
@@ -586,7 +590,6 @@
             handlePath : function(e){
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
-
                 var mapElement = this.$$('#map');
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
