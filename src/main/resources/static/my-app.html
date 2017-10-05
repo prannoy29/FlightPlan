@@ -516,7 +516,7 @@
                 ls.appendChild(node);
                 this.listen(node, 'click', 'clickSetHome');
                 this.lati = 48.5;
-                this.longi = 103.5;
+                this.longi = -103.5;
            },
 
             toggleDialog: function(e) {
@@ -526,14 +526,12 @@
             },
 
             fg: function(e) {
-
                 if(this.draw_shape !== 0) {
                     var draw_poly = this.$$('#polygon');
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
                     console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
-
                     this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
                     draw_poly.appendChild(node1);
                 }

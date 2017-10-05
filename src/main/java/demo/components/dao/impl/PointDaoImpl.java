@@ -101,4 +101,23 @@ public class PointDaoImpl implements PointDao {
         return pointsList;
     }
 
+    @Override
+    public List<Double> getWayPointX(String geoJsonLineString) {
+        String query = "SELECT ST_X(ST_PointN(ST_GeomFromGeoJSON('"+geoJsonLineString+"')" +
+                ",generate_series(1,ST_NPoints(ST_GeomFromGeoJSON('"+geoJsonLineString+"')))))";
+        List<Double> pointsList = jdbcTemplate.queryForList(query,Double.class);
+        System.out.println(pointsList);
+        return pointsList;
+    }
+
+    @Override
+    public List<Double> getWayPointY(String geoJsonLineString) {
+        String query = "SELECT ST_Y(ST_PointN(ST_GeomFromGeoJSON('"+geoJsonLineString+"')" +
+                ",generate_series(1,ST_NPoints(ST_GeomFromGeoJSON('"+geoJsonLineString+"')))))";
+        List<Double> pointsList = jdbcTemplate.queryForList(query,Double.class);
+        System.out.println(pointsList);
+        return pointsList;
+    }
+
+
 }

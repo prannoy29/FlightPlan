@@ -25,21 +25,36 @@ public class PointController {
     }
 
     @RequestMapping(value = "/getRestrictPath",method = RequestMethod.POST)
-    public List<GeoPoint> getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString,
+    public List<List<GeoPoint>>getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString,
                                           @RequestParam("h1")double h1,
                                           @RequestParam("h2")double h2){
 
         String queryLine = geoJsonLineString.toString();
         System.out.println(queryLine);
-        List<Double> pointsLineX= pointDao.getRestrictedPathPointsX(queryLine,h1,h2);
-        List<Double> pointsLineY= pointDao.getRestrictedPathPointsY(queryLine,h1,h2);
-        List<GeoPoint> pointsLineList = new ArrayList<>();
-       int i=0;
-        while(pointsLineX.size()==pointsLineY.size()&& pointsLineY.size()> i){
-            pointsLineList.add(new GeoPoint(pointsLineX.get(i),pointsLineY.get(i)));
-            i++;
+        List<Double> wayPointsX = pointDao.getWayPointX(queryLine);
+        List<Double> wayPointsY = pointDao.getWayPointX(queryLine);
+        List<List<GeoPoint>> multiPointsLineList = new ArrayList<>();
+        for(int j =0;j<wayPointsX.size() && j < wayPointsY.size();j++) {
+            List<double[]> coordinates = new ArrayList<>();
+            double [] point1 = new double[2];
+            point1[0] = wayPointsX.get(j);
+            point1[1] = wayPointsY.get(j);
+            coordinates.add(point1);
+            double [] point2 = new double[2];
+            point2[0] = wayPointsX.get(j+1);
+            point2[1] = wayPointsX.get(j+1);
+            coordinates.add(point2);
+            String queryLineNew = new GeoJsonLineString(coordinates).toString();
+            List<Double> pointsLineX = pointDao.getRestrictedPathPointsX(queryLineNew, h1, h2);
+            List<Double> pointsLineY = pointDao.getRestrictedPathPointsY(queryLineNew, h1, h2);
+            List<GeoPoint> pointsLineList = new ArrayList<>();
+            int i = 0;
+            while (pointsLineX.size() == pointsLineY.size() && pointsLineY.size() > i) {
+                pointsLineList.add(new GeoPoint(pointsLineX.get(i), pointsLineY.get(i)));
+                i++;
+            }
         }
-        return pointsLineList;
+        return multiPointsLineList;
     }
 
     @RequestMapping(value = "/getRestrictPat",method = RequestMethod.POST)

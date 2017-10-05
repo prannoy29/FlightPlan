@@ -21,4 +21,6 @@ public interface PointDao {
     List<GeoPoint> getRestrictedPathPoints(String geoJsonLineString,double h1, double h2);
     List<Double> getAllX(String geoJsonLineString);
     List<Double> getAllY(String geoJsonLineString);
+    List<Double> getWayPointX(String geoJsonLineString);
+    List<Double> getWayPointY(String geoJsonLineString);
 }
