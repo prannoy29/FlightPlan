@@ -82,12 +82,6 @@ public class PointController {
         pointsLineList1.add(new GeoPoint(-122.4194,37.7749));
         pointsLineList1.add(new GeoPoint(-118.2437,34.0522));
         pointsLineLists.add(pointsLineList1);
-
-
-        List<GeoPoint> pointsLineList2 = new ArrayList<>();
-        pointsLineList2.add(new GeoPoint(-87.6298,41.8781));
-        pointsLineList2.add(new GeoPoint(-84.3880,33.7490));
-        pointsLineLists.add(pointsLineList2);
         return pointsLineLists;
     }
 

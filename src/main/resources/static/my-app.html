@@ -245,20 +245,17 @@
                         fit-to-markers = "true" zoom={{zoom}}
                         latitude="48.5" longitude="-103.5" fit-to-markers map="{{map}}" api-key="AIzaSyDbDxZvaQJ5QPYwhWSXn0WWKIxIhhMfups">
                 <!-- <template is="dom-repeat" items="[[friends]]" as="f">-->
-                <google-map-marker   hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
+                <google-map-marker id="marker3" hidden="true"  click-events = "true" latitude="{{lati}}" longitude="{{longi}}" on-latitude-changed="markerClick">
                 </google-map-marker>
-
                 <google-map-poly id="polygonflight"  stroke-weight="12"  click-events = "true" clickable="true" on-google-map-poly-click="polyclick">
                 </google-map-poly>
-
-
                 <google-map-poly id="polygon">
                 </google-map-poly>
-                <google-map-poly stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000" id="polygonred">
+                <google-map-poly id="polygonred" stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000">
                 </google-map-poly>
-                <google-map-marker marker={{marker}} latitude="{{lati1}}" longitude="{{longi1}}">
+                <google-map-marker id="marker1" marker={{marker}} latitude="{{lati1}}" longitude="{{longi1}}">
                 </google-map-marker>
-                <google-map-marker   hidden="true"  latitude="{{latilast}}" longitude="{{longilast}}">
+                <google-map-marker id="marker2" hidden="true"  latitude="{{latilast}}" longitude="{{longilast}}">
                 </google-map-marker>
 
                 <!--</template>-->
@@ -341,6 +338,9 @@
                 map : {
                     type : Object
                 },
+                polys : {
+                    type : Object
+                },
                 marker : {
                     type : Object
                 },
@@ -393,12 +393,8 @@
                 var xhr = this.$$('#ajaxId');
                 xhr.generateRequest();
             },
-
-
-
 */
             polyclick : function(e){
-
                 var latitude =e.detail.latLng.lat();
                 var longitude = e.detail.latLng.lng();
                 var fk;
@@ -407,7 +403,7 @@
                 var t = document.querySelector('#pop');
                 var xhr = this.$$('#ajaxId2');
                 var infoOnMap = this.$$('#infomap');
-                var url = 'http://localhost:8080/point/getElevation';
+                var url = 'http://localhost:8080/point/getElevatio';
                 xhr.url = encodeURI(url);
                 xhr.headers = {"Accept": "*/*", "Content-Type": "application/json"};
                 var iwindow = new google.maps.InfoWindow();
@@ -430,10 +426,10 @@
                     wk = this.weather;
                     var uluru = {lat: latitude, lng: longitude};
                     //iwindow.setContent(fk);
-                    var infoContents = Math.round(parseFloat(fk) * 100);
+                    var infoContents = Math.round(parseFloat(3.2*fk) * 100);
                     var ind = infoContents / 100;
                     if (fk !== 'Null' && typeof  wk.temperature_min_f !== "undefined")
-                        infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " meters  <br /><br /><b>" + wk.condition + " </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
+                        infoOnMap.innerHTML = "<b>Elevation</b> : " + ind + " feet  <br /><br /><b>" + wk.condition + " </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
                     else if (fk === 'Null' && typeof  wk.temperature_min_f !== "undefined")
                         infoOnMap.innerHTML = "<b>" + wk.condition + "</b><span style='float:right; font-size:20px; margin-left:10px'>" + wk.temperature_min_f + " F</span>"
                     else if (fk !== 'Null' && typeof  wk.temperature_min_f == "undefined")
@@ -460,12 +456,33 @@
                 for(var aa = 0; aa < len; aa++) {
                     A.removeChild(A_child[0]);
                 }
-                var A = this.$$('#polygonred');
-                var A_child = A.childNodes;
-                var len = A_child.length;
+
+                var A1 = this.$$('#map');
+                var A_child1 = A1.childNodes;
+                var len1 = A_child1.length;
                 for(var aa = 0; aa < len; aa++) {
-                    A.removeChild(A_child[0]);
+                    var A_grandchild = A_child1[aa].childNodes;
+                    var elementlen = A_grandchild.length;
+                    console.log(elementlen);
+                    console.log(A_grandchild);
+                    for(var aa1 = 0; aa1 < elementlen; aa1++) {
+                        A_child1[aa].removeChild(A_grandchild[0]);
+                    }
                 }
+                var polysList = this.polys;
+                var l = polysList.length;
+                console.log(polysList);
+                for(var aa = 0; aa < l; aa++) {
+                    try {
+                        A1.removeChild(polysList[aa]);
+                        console.log("Done!");
+                    }
+                    catch(err){
+                        console.log(err);
+                    }
+                }
+
+
                 if(this.draw_shape == 0) {
                     this.draw_shape = 1;
                     this.$$("#over_map").style.display = "block";
@@ -489,10 +506,13 @@
                 finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
                 initialHeight = parseInt(initialHeight)/3.28084;
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> f70b67d2d372d1a3cb2eafbf7408a140af954e05
                 var url = "http://localhost:8080/getRestrictPath";
-                /*?h1=10&h2=20*/
+                initialHeight = parseInt(initialHeight)*3.28084;
                 xhrPath.url = encodeURI(url);
                 xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
                 xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
@@ -505,6 +525,7 @@
 
             ready: function() {
                 this.draw_lines = [];
+                this.polys = [];
                 this.red_lines = [];
                 this.draw_shape = 0;
                 var ls = this.$$('#headerFP');
@@ -570,9 +591,6 @@
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
                 var mapElement = this.$$('#map');
-                var draw_poly = this.$$('#polygonred');
-                console.log(e.detail);
-                console.log(e.detail.response);
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
 /*stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000"*/
@@ -587,6 +605,7 @@
                         node1.appendChild(node2);
                         console.log(i + " is : " + node2.latitude + ',' + node2.longitude);
                     }
+                    this.polys.push(node1);
                 }
             },
 
