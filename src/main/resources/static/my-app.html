@@ -572,6 +572,10 @@
                 var draw_poly = this.$$('#polygonred');
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
+/*stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000"*/
+                    node1.strokeColor = "#FF0000";
+                    node1.strokeOpacity = 0.4;
+                    node1.strokeWeight = 9;
                     mapElement.appendChild(node1);
                     for(var j = 0; j < f[i].length; j++) {
                         var node2 = document.createElement('google-map-point');
