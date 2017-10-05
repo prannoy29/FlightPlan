@@ -471,7 +471,7 @@
                     this.$$("#over_map").style.display = "block";
                     this.$$("#over_map").style.width = "132px";
                     this.$$("#over_map").style.height = "80px";
-                    this.$$("#over_map").innerHTML = "Drone height (metre):<br /><paper-input class='whiteInput' id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input class='whiteInput' id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
+                    this.$$("#over_map").innerHTML = "Drone height (feet):<br /><paper-input class='whiteInput' id='initialHeight' always-float-label style='width:40px' label='Initial'><br /></paper-input><paper-input class='whiteInput' id='finalHeight' always-float-label style='width:40px;margin-top:-63px;float:right' label='Final'></paper-input>";
 
                 }
                 else
@@ -486,9 +486,9 @@
                 var xhrPath = this.$$('#ajaxPath');
                 this.$$("#over_map").style.display = "none";
                 var finalHeight = this.$$("#finalHeight").value;
-                finalHeight = parseInt(finalHeight)*3.28084;
+                finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
-                initialHeight = parseInt(initialHeight)*3.28084;
+                initialHeight = parseInt(initialHeight)/3.28084;
 
 
                 var url = "http://localhost:8080/getRestrictPath";
@@ -569,9 +569,10 @@
             handlePath : function(e){
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
-
                 var mapElement = this.$$('#map');
                 var draw_poly = this.$$('#polygonred');
+                console.log(e.detail);
+                console.log(e.detail.response);
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
 /*stroke-opacity="0.5" stroke-weight="7" stroke-color="#FF0000"*/
