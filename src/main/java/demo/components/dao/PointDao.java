@@ -1,9 +1,11 @@
 package demo.components.dao;
 
+import demo.components.domain.GeoJsonLineString;
 import demo.components.domain.GeoPoint;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
+import java.util.ListResourceBundle;
 
 
 public interface PointDao {
@@ -16,4 +18,7 @@ public interface PointDao {
 
     List<Double> getRestrictedPathPointsX(String geoJsonLineString,double h1, double h2);
     List<Double> getRestrictedPathPointsY(String geoJsonLineString,double h1, double h2);
+    List<GeoPoint> getRestrictedPathPoints(String geoJsonLineString,double h1, double h2);
+    List<Double> getAllX(String geoJsonLineString);
+    List<Double> getAllY(String geoJsonLineString);
 }

@@ -506,8 +506,8 @@
                 finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
                 initialHeight = parseInt(initialHeight)/3.28084;
-                var url = "http://localhost:8080/getRestrictPat";
-                /*?h1=10&h2=20*/
+                var url = "http://localhost:8080/getRestrictPath";
+                initialHeight = parseInt(initialHeight)*3.28084;
                 xhrPath.url = encodeURI(url);
                 xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
                 xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
@@ -515,7 +515,6 @@
                         "type": "LineString",
                         "coordinates": this.draw_lines
                     };
-
                     xhrPath.generateRequest();
             },
 
@@ -547,6 +546,8 @@
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
+                    console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
+
                     this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
                     draw_poly.appendChild(node1);
                 }
@@ -585,6 +586,7 @@
             handlePath : function(e){
                 this.red_lines = e.detail.response;
                 var f = this.red_lines;
+
                 var mapElement = this.$$('#map');
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
