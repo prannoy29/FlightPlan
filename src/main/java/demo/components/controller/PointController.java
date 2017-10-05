@@ -32,9 +32,9 @@ public class PointController {
         String queryLine = geoJsonLineString.toString();
         System.out.println(queryLine);
         List<Double> wayPointsX = pointDao.getWayPointX(queryLine);
-        List<Double> wayPointsY = pointDao.getWayPointX(queryLine);
+        List<Double> wayPointsY = pointDao.getWayPointY(queryLine);
         List<List<GeoPoint>> multiPointsLineList = new ArrayList<>();
-        for(int j =0;j<wayPointsX.size() && j < wayPointsY.size();j++) {
+        for(int j =0;j<wayPointsX.size()-1 && j < wayPointsY.size()-1;j++) {
             List<double[]> coordinates = new ArrayList<>();
             double [] point1 = new double[2];
             point1[0] = wayPointsX.get(j);
@@ -42,9 +42,10 @@ public class PointController {
             coordinates.add(point1);
             double [] point2 = new double[2];
             point2[0] = wayPointsX.get(j+1);
-            point2[1] = wayPointsX.get(j+1);
+            point2[1] = wayPointsY.get(j+1);
             coordinates.add(point2);
             String queryLineNew = new GeoJsonLineString(coordinates).toString();
+            System.out.println(queryLineNew);
             List<Double> pointsLineX = pointDao.getRestrictedPathPointsX(queryLineNew, h1, h2);
             List<Double> pointsLineY = pointDao.getRestrictedPathPointsY(queryLineNew, h1, h2);
             List<GeoPoint> pointsLineList = new ArrayList<>();
@@ -53,10 +54,15 @@ public class PointController {
                 pointsLineList.add(new GeoPoint(pointsLineX.get(i), pointsLineY.get(i)));
                 i++;
             }
+            multiPointsLineList.add(pointsLineList);
         }
         return multiPointsLineList;
     }
-
+/*@RequestMapping(value = "/getRestrictPath",method = RequestMethod.POST)
+    public List<List<GeoPoint>>getRestrictPath(@RequestBody GeoJsonLineString geoJsonLineString,
+                                          @RequestParam("h1")double h1,
+                                          @RequestParam("h2")double h2){
+*/
     @RequestMapping(value = "/getRestrictPat",method = RequestMethod.POST)
     public List<List<GeoPoint>> getRestrictPat(@RequestBody GeoJsonLineString geoJsonLineString,
                                           @RequestParam("h1")double h1,
