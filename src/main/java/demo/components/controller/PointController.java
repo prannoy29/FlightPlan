@@ -43,18 +43,31 @@ public class PointController {
     }
 
     @RequestMapping(value = "/getRestrictPat",method = RequestMethod.POST)
-    public List<GeoPoint> getRestrictPat(@RequestBody GeoJsonLineString geoJsonLineString,
+    public List<List<GeoPoint>> getRestrictPat(@RequestBody GeoJsonLineString geoJsonLineString,
                                           @RequestParam("h1")double h1,
                                           @RequestParam("h2")double h2){
 
+        List<List<GeoPoint>> pointsLineLists = new ArrayList<>();
         List<GeoPoint> pointsLineList = new ArrayList<>();
-        pointsLineList.add(new GeoPoint(-103.47644805908202,48.481797443497655));
+        pointsLineList.add(new GeoPoint(-103.476448908202,48.481797443497655));
         pointsLineList.add(new GeoPoint(-103.48297119140625,48.46950694703277));
         pointsLineList.add(new GeoPoint(-103.45172882080078,48.4471943668555));
         pointsLineList.add(new GeoPoint(-103.4743881225586,48.43170640490076));
         pointsLineList.add(new GeoPoint(-103.46031188964844,48.40937721168385));
         pointsLineList.add(new GeoPoint(-103.50357055664062,48.41347922740733));
-        return pointsLineList;
+        pointsLineLists.add(pointsLineList);
+
+        List<GeoPoint> pointsLineList1 = new ArrayList<>();
+        pointsLineList1.add(new GeoPoint(-122.4194,37.7749));
+        pointsLineList1.add(new GeoPoint(-118.2437,34.0522));
+        pointsLineLists.add(pointsLineList1);
+
+
+        List<GeoPoint> pointsLineList2 = new ArrayList<>();
+        pointsLineList2.add(new GeoPoint(-87.6298,41.8781));
+        pointsLineList2.add(new GeoPoint(-84.3880,33.7490));
+        pointsLineLists.add(pointsLineList2);
+        return pointsLineLists;
     }
 
 
