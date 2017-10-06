@@ -450,6 +450,8 @@
             },
 
             drawtoggle : function(){
+                console.log("lengght is " +  this.polys.length);
+
                 var A = this.$$('#polygon');
                 var A_child = A.childNodes;
                 var len = A_child.length;
@@ -463,22 +465,32 @@
                 for(var aa = 0; aa < len; aa++) {
                     var A_grandchild = A_child1[aa].childNodes;
                     var elementlen = A_grandchild.length;
-                    console.log(elementlen);
-                    console.log(A_grandchild);
+                   /* console.log(elementlen);
+                    console.log(A_grandchild);*/
                     for(var aa1 = 0; aa1 < elementlen; aa1++) {
                         A_child1[aa].removeChild(A_grandchild[0]);
                     }
                 }
-                var polysList = this.polys;
-                var l = polysList.length;
+                var polysList = [];
+                for(var b = 0; b < this.polys.length; b++){
+                    polysList.push(this.polys[b]);
+                }
+                var g = this.polys.length;
+                for(var b = 0; b < g; b++){
+                    this.pop('polys');
+                }
+
                 console.log(polysList);
+                console.log(this.polys);
+                console.log("check " + polysList);
+                var l = polysList.length;
                 for(var aa = 0; aa < l; aa++) {
                     try {
                         A1.removeChild(polysList[aa]);
                         console.log("Done!");
                     }
                     catch(err){
-                        console.log(err);
+                        /*console.log(err);*/
                     }
                 }
 
@@ -500,19 +512,14 @@
             },
 
             drawtoggle1 : function(){
+                console.log("length is " + this.polys.length);
                 var xhrPath = this.$$('#ajaxPath');
                 this.$$("#over_map").style.display = "none";
                 var finalHeight = this.$$("#finalHeight").value;
                 finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
                 initialHeight = parseInt(initialHeight)/3.28084;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> f70b67d2d372d1a3cb2eafbf7408a140af954e05
                 var url = "http://localhost:8080/getRestrictPath";
-                initialHeight = parseInt(initialHeight)*3.28084;
                 xhrPath.url = encodeURI(url);
                 xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
                 xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
@@ -521,6 +528,10 @@
                         "coordinates": this.draw_lines
                     };
                     xhrPath.generateRequest();
+                    var lq = this.draw_lines.length;
+                    for(var oo = 0; oo < lq; oo++){
+                        this.pop('draw_lines');
+                    }
             },
 
             ready: function() {
@@ -551,8 +562,8 @@
                     var node1 = document.createElement('google-map-point');
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
-                    console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
-                    this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
+                    /*console.log("Input is "+ node1.latitude+' , '+ node1.longitude);
+                    */this.draw_lines.push([e.detail.latLng.lng(), e.detail.latLng.lat()]);
                     draw_poly.appendChild(node1);
                 }
             },
@@ -588,8 +599,8 @@
             },
 
             handlePath : function(e){
-                this.red_lines = e.detail.response;
-                var f = this.red_lines;
+                var f = e.detail.response;
+                console.log("response length "+ f.length);
                 var mapElement = this.$$('#map');
                 for(var i = 0; i < f.length; i++){
                     var node1 = document.createElement('google-map-poly');
@@ -603,10 +614,10 @@
                         node2.latitude = f[i][j].lat;
                         node2.longitude = f[i][j].lon;
                         node1.appendChild(node2);
-                        console.log(i + " is : " + node2.latitude + ',' + node2.longitude);
-                    }
-                    this.polys.push(node1);
+                        }
+                    this.push('polys', node1);
                 }
+                console.log("length is " + this.polys.length);
             },
 
             handlePathError : function(e){
