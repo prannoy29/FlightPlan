@@ -506,13 +506,7 @@
                 finalHeight = parseInt(finalHeight)/3.28084;
                 var initialHeight = this.$$("#initialHeight").value;
                 initialHeight = parseInt(initialHeight)/3.28084;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> f70b67d2d372d1a3cb2eafbf7408a140af954e05
                 var url = "http://localhost:8080/getRestrictPath";
-                initialHeight = parseInt(initialHeight)*3.28084;
                 xhrPath.url = encodeURI(url);
                 xhrPath.params = {"h1": initialHeight, "h2": finalHeight };
                 xhrPath.headers = {"Accept": "*/*", "Content-Type": "application/json"};
@@ -521,6 +515,42 @@
                         "coordinates": this.draw_lines
                     };
                     xhrPath.generateRequest();
+
+                var latitude = this.lat;
+                var longitude = this.long;
+                var fk;
+                var wk;
+                var xhrWeather = this.$$('#ajaxWeather');
+                var xhr = this.$$('#ajaxId2');
+                var url = 'http://localhost:8080/point/getElevation';
+                xhr.url = encodeURI(url);
+                xhr.headers = {"Accept": "*/*", "Content-Type": "application/json"};
+                xhr.body = {
+                    "type": "Point",
+                    "coordinates": [this.long, this.lat]
+                };
+                xhr.generateRequest();
+                var weatherurl = "http://localhost:8080/weather/id?lat=" + latitude + "&lon=" + longitude + "&date=2017-06-22T8:40:00Z";
+                xhrWeather.url = encodeURI(weatherurl);
+                xhrWeather.generateRequest();
+                fk = this.contents;
+                wk = this.weather;
+                var uluru = {lat: latitude, lng: longitude};
+                //iwindow.setContent(fk);
+                var infoContents = Math.round(parseFloat(3.2*fk) * 100);
+                var ind = infoContents / 100;
+                var blueTab = this.$$("#over_map");
+                this.$$("#over_map").style.display = "block";
+                this.$$("#over_map").style.width = "180px";
+                this.$$("#over_map").style.height = "70px";
+                if (fk !== 'Null' && typeof  wk.temperature_min_f !== "undefined")
+                    blueTab.innerHTML = "<b>Elevation</b> : " + ind + " feet  <br /><br /><b>" + wk.condition + " </b><span style='float:right; font-size:20px'>" + wk.temperature_min_f + " F</span>";
+                else if (fk === 'Null' && typeof  wk.temperature_min_f !== "undefined")
+                    blueTab.innerHTML = "<b>" + wk.condition + "</b><span style='float:right; font-size:20px; margin-left:10px'>" + wk.temperature_min_f + " F</span>"
+                else if (fk !== 'Null' && typeof  wk.temperature_min_f == "undefined")
+                    blueTab.innerHTML = "<b>Elevation</b> : " + ind + " meters";
+                else if (fk === 'Null' && typeof  wk.temperature_min_f == "undefined")
+                    this.$$("#over_map").style.display = "none";
             },
 
             ready: function() {
@@ -549,6 +579,8 @@
                 if(this.draw_shape !== 0) {
                     var draw_poly = this.$$('#polygon');
                     var node1 = document.createElement('google-map-point');
+                    this.lat = e.detail.latLng.lat();
+                    this.long = e.detail.latLng.lng();
                     node1.latitude = e.detail.latLng.lat();
                     node1.longitude = e.detail.latLng.lng();
                     console.log("Input is "+ node1.latitude+' , '+ node1.longitude);

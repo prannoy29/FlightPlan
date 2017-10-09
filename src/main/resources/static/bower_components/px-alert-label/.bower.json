@@ -1,0 +1,45 @@
+{
+  "name": "px-alert-label",
+  "version": "2.0.8",
+  "main": [
+    "px-alert-label.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "node_modules",
+    "bower_components",
+    "sass",
+    "*.md",
+    "scripts",
+    ".github",
+    "gulpfile.js",
+    "wct.conf.json",
+    "test",
+    "OSS_Notice.pdf",
+    "*.png",
+    "npm-debug.log"
+  ],
+  "dependencies": {
+    "polymer": "^1.9.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-demo": "^2.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.7.24"
+  },
+  "homepage": "https://github.com/PredixDev/px-alert-label",
+  "_release": "2.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.8",
+    "commit": "f8c14b51da396eb3a94cb32e1fd478d62ed31291"
+  },
+  "_source": "https://github.com/PredixDev/px-alert-label.git",
+  "_target": "^2.0.0",
+  "_originalSource": "px-alert-label"
+}

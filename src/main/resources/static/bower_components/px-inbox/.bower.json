@@ -1,0 +1,64 @@
+{
+  "name": "px-inbox",
+  "version": "2.2.3",
+  "main": [
+    "px-inbox.html"
+  ],
+  "ignore": [
+    "*.enc",
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    "px-demo.png",
+    "*.md",
+    ".jshintrc",
+    ".editorconfig",
+    "monogram-wdmk.png",
+    "*.png",
+    "wct.conf.json"
+  ],
+  "dependencies": {
+    "polymer": "^1.9.0",
+    "moment": "^2.15.1",
+    "px-dropdown": "^4.0.0",
+    "px-icon-set": "^2.0.0",
+    "px-alert-label": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.1",
+    "app-localize-behavior": "^2.0.0"
+  },
+  "devDependencies": {
+    "px-theme": "^3.0.0",
+    "px-demo": "^2.0.0",
+    "px-forms-design": "^2.0.0",
+    "px-list-ui-design": "^2.0.0",
+    "px-headings-design": "^1.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-shadows-design": "^1.0.0",
+    "px-actionable-design": "^2.0.0",
+    "px-spacing-design": "^1.0.0",
+    "px-key-value-pair": "^1.0.2"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.7.24"
+  },
+  "homepage": "https://github.com/predixdev/px-inbox",
+  "_release": "2.2.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.3",
+    "commit": "bd9ef6c22b384635d4a7981629f9a8bbf11eaec9"
+  },
+  "_source": "https://github.com/predixdev/px-inbox.git",
+  "_target": "^2.2.3",
+  "_originalSource": "px-inbox",
+  "_direct": true
+}
